@@ -81,15 +81,21 @@
             border-radius: 4px;
         }
 
-        /* Page Sections */
-        .page {
+        /* Page Container */
+        .page-container {
             display: none;
             min-height: 100vh;
             padding: 20px 0;
         }
 
-        .page.active {
+        .page-container.active {
             display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         /* Header/Navigation */
@@ -98,8 +104,9 @@
             padding: 15px 0;
             border-bottom: 3px solid var(--gold);
             box-shadow: var(--shadow);
-            position: relative;
-            z-index: 100;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         .header-content {
@@ -114,15 +121,17 @@
             color: var(--gold);
             text-shadow: 3px 3px 0 var(--dark-brown);
             letter-spacing: 2px;
+            cursor: pointer;
+            user-select: none;
         }
 
-        .auth-buttons {
+        .nav-buttons {
             display: flex;
             gap: 10px;
         }
 
         .btn {
-            padding: 8px 20px;
+            padding: 10px 20px;
             border: none;
             border-radius: 8px;
             font-family: 'Cinzel', serif;
@@ -134,6 +143,7 @@
             gap: 8px;
             text-decoration: none;
             user-select: none;
+            font-size: 1rem;
         }
 
         .btn-login {
@@ -154,12 +164,20 @@
             border: 2px solid #8B0000;
         }
 
+        .btn-nav {
+            background: linear-gradient(to bottom, var(--secondary-brown), var(--primary-brown));
+            color: var(--text);
+            border: 2px solid var(--dark-gold);
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
-        /* Menu Page */
+        /* Main Menu Page */
         .menu-container {
             display: flex;
             flex-direction: column;
@@ -168,6 +186,7 @@
             min-height: 80vh;
             gap: 40px;
             text-align: center;
+            padding: 20px;
         }
 
         .menu-title {
@@ -182,13 +201,15 @@
             font-size: 1.5rem;
             color: var(--light-brown);
             margin-bottom: 40px;
+            max-width: 800px;
         }
 
         .menu-buttons {
             display: flex;
             flex-direction: column;
             gap: 20px;
-            width: 300px;
+            width: 100%;
+            max-width: 400px;
         }
 
         .menu-btn {
@@ -202,27 +223,28 @@
             overflow: hidden;
             cursor: pointer;
             user-select: none;
-        }
-
-        .menu-btn::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(to bottom, transparent, rgba(255,215,0,0.1), transparent);
-            transform: rotate(45deg);
             transition: var(--transition);
         }
 
-        .menu-btn:hover::after {
-            left: 100%;
+        .menu-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
 
         .btn-play {
             background: linear-gradient(to bottom, var(--success-green), #006400);
             border-color: #32CD32;
+        }
+
+        .btn-how-to-play {
+            background: linear-gradient(to bottom, var(--gem-blue), #1E5FA3);
+            border-color: var(--gem-blue);
+        }
+
+        .btn-leaderboard {
+            background: linear-gradient(to bottom, var(--gold), var(--dark-gold));
+            border-color: var(--gold);
+            color: var(--dark-brown);
         }
 
         .btn-quit {
@@ -248,6 +270,7 @@
             align-items: center;
             gap: 10px;
             font-size: 1.2rem;
+            min-width: 200px;
         }
 
         .stat-icon {
@@ -278,9 +301,14 @@
         .stat-value {
             font-weight: 700;
             font-size: 1.3rem;
+            color: var(--gold);
         }
 
-        /* Main Game */
+        /* Main Game Page */
+        .game-content {
+            padding: 20px 0;
+        }
+
         .game-container {
             display: grid;
             grid-template-columns: 1fr 300px;
@@ -307,17 +335,6 @@
             min-height: 400px;
             position: relative;
             overflow: hidden;
-        }
-
-        .click-area::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none"/><path d="M20,20 Q50,10 80,20 T100,50 Q90,80 80,90 T50,100 Q10,90 20,80 T0,50 Q10,20 20,20Z" stroke="%23D2691E" stroke-width="0.5" fill="none"/></svg>');
-            opacity: 0.1;
         }
 
         .click-button {
@@ -687,60 +704,158 @@
             margin-right: 10px;
         }
 
-        /* Chat Section */
-        .chat-section {
-            background: linear-gradient(to bottom, var(--dark-brown), var(--primary-brown));
-            border: 2px solid var(--light-brown);
-            border-radius: 15px;
-            padding: 20px;
+        /* Achievements Page */
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
             margin-top: 20px;
         }
 
-        .chat-messages {
-            height: 200px;
-            overflow-y: auto;
-            background: rgba(93, 64, 55, 0.5);
-            border-radius: 8px;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid var(--light-brown);
-        }
-
-        .chat-message {
-            margin-bottom: 8px;
-            padding: 5px 10px;
-            background: rgba(160, 82, 45, 0.3);
-            border-radius: 5px;
-            border-left: 3px solid var(--gold);
-        }
-
-        .chat-message .user {
-            color: var(--gold);
-            font-weight: 700;
-        }
-
-        .chat-input-container {
+        .achievement-card {
+            background: linear-gradient(to bottom, var(--dark-brown), var(--primary-brown));
+            border: 2px solid var(--gold);
+            border-radius: 15px;
+            padding: 20px;
             display: flex;
-            gap: 10px;
+            gap: 15px;
+            align-items: center;
         }
 
-        .chat-input {
-            flex: 1;
-            padding: 10px;
-            background: rgba(93, 64, 55, 0.5);
-            border: 1px solid var(--light-brown);
-            border-radius: 8px;
-            color: var(--text);
-            font-family: 'Cinzel', serif;
+        .achievement-card.locked {
+            opacity: 0.5;
+            filter: grayscale(100%);
         }
 
-        .chat-input:focus {
-            outline: none;
-            border-color: var(--gold);
+        .achievement-icon {
+            font-size: 3rem;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .achievement-info h3 {
+            color: var(--gold);
+            margin-bottom: 5px;
+        }
+
+        .achievement-description {
+            color: var(--light-brown);
+            margin-bottom: 10px;
+        }
+
+        .achievement-reward {
+            color: var(--gem-purple);
+            font-weight: bold;
+        }
+
+        /* How to Play Page */
+        .how-to-play-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px;
+            background: linear-gradient(to bottom, var(--dark-brown), var(--primary-brown));
+            border: 3px solid var(--gold);
+            border-radius: 20px;
+        }
+
+        .how-to-play-section {
+            margin-bottom: 30px;
+        }
+
+        .how-to-play-section h2 {
+            color: var(--gold);
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--light-brown);
+            padding-bottom: 5px;
+        }
+
+        .how-to-play-section ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+
+        .how-to-play-section li {
+            margin-bottom: 10px;
+            padding-left: 10px;
+            position: relative;
+        }
+
+        .how-to-play-section li:before {
+            content: '•';
+            color: var(--gold);
+            position: absolute;
+            left: -10px;
+        }
+
+        /* Settings Page */
+        .settings-content {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 30px;
+            background: linear-gradient(to bottom, var(--dark-brown), var(--primary-brown));
+            border: 3px solid var(--gold);
+            border-radius: 20px;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--light-brown);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--dark-brown);
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: var(--text);
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--gold);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
         }
 
         /* Auth Modal */
-        .auth-modal {
+        .modal-overlay {
             display: none;
             position: fixed;
             top: 0;
@@ -748,16 +863,16 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
+            z-index: 2000;
             align-items: center;
             justify-content: center;
         }
 
-        .auth-modal.active {
+        .modal-overlay.active {
             display: flex;
         }
 
-        .auth-content {
+        .modal-content {
             background: linear-gradient(to bottom, var(--primary-brown), var(--dark-brown));
             border: 3px solid var(--gold);
             border-radius: 20px;
@@ -767,7 +882,7 @@
             position: relative;
         }
 
-        .auth-close {
+        .modal-close {
             position: absolute;
             top: 15px;
             right: 15px;
@@ -778,7 +893,7 @@
             cursor: pointer;
         }
 
-        .auth-title {
+        .modal-title {
             font-family: 'MedievalSharp', cursive;
             font-size: 2rem;
             color: var(--gold);
@@ -848,188 +963,6 @@
             to { opacity: 0; }
         }
 
-        /* Achievements */
-        .achievements-section {
-            background: linear-gradient(to bottom, var(--dark-brown), var(--primary-brown));
-            border: 2px solid var(--gold);
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        .achievements-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .achievement {
-            background: rgba(160, 82, 45, 0.3);
-            border: 1px solid var(--light-brown);
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
-            position: relative;
-        }
-
-        .achievement.locked {
-            opacity: 0.5;
-            filter: grayscale(100%);
-        }
-
-        .achievement-icon {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-
-        .achievement-reward {
-            color: var(--gold);
-            font-size: 0.9rem;
-            margin-top: 5px;
-        }
-
-        /* Quests */
-        .quests-section {
-            background: linear-gradient(to bottom, var(--dark-brown), var(--primary-brown));
-            border: 2px solid var(--gem-blue);
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        .quest-item {
-            background: rgba(65, 105, 225, 0.2);
-            border: 1px solid var(--gem-blue);
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 10px;
-        }
-
-        .quest-progress {
-            height: 10px;
-            background: rgba(93, 64, 55, 0.5);
-            border-radius: 5px;
-            margin-top: 10px;
-            overflow: hidden;
-        }
-
-        .quest-progress-bar {
-            height: 100%;
-            background: linear-gradient(to right, var(--gold), var(--dark-gold));
-            border-radius: 5px;
-            transition: width 0.5s ease;
-        }
-
-        /* Inventory */
-        .inventory-section {
-            background: linear-gradient(to bottom, var(--dark-brown), var(--primary-brown));
-            border: 2px solid var(--silver);
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        .inventory-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .inventory-item {
-            aspect-ratio: 1;
-            background: rgba(160, 82, 45, 0.3);
-            border: 2px solid var(--light-brown);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            position: relative;
-        }
-
-        .item-count {
-            position: absolute;
-            bottom: 2px;
-            right: 2px;
-            background: var(--gold);
-            color: var(--dark-brown);
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            font-size: 0.7rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Settings */
-        .settings-section {
-            background: linear-gradient(to bottom, var(--dark-brown), var(--primary-brown));
-            border: 2px solid var(--light-brown);
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        .setting-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--light-brown);
-        }
-
-        .setting-item:last-child {
-            border-bottom: none;
-        }
-
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 24px;
-        }
-
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: var(--dark-brown);
-            transition: .4s;
-            border-radius: 24px;
-        }
-
-        .toggle-slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 4px;
-            bottom: 4px;
-            background-color: var(--text);
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .toggle-slider {
-            background-color: var(--gold);
-        }
-
-        input:checked + .toggle-slider:before {
-            transform: translateX(26px);
-        }
-
         /* Utility Classes */
         .hidden {
             display: none !important;
@@ -1041,74 +974,6 @@
 
         .full-width {
             width: 100%;
-        }
-
-        /* Portrait Mode Optimizations */
-        @media (orientation: portrait) {
-            .game-container {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-            
-            .stats-bar {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 10px;
-            }
-            
-            .stat-item {
-                justify-content: center;
-            }
-            
-            .click-button {
-                width: 150px;
-                height: 150px;
-            }
-            
-            .menu-title {
-                font-size: 2.5rem;
-            }
-            
-            .menu-buttons {
-                width: 100%;
-            }
-            
-            .convert-section {
-                grid-template-columns: 1fr;
-            }
-            
-            .shop-items {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .pets-container {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            
-            .achievements-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .inventory-grid {
-                grid-template-columns: repeat(5, 1fr);
-            }
-        }
-
-        /* Landscape Mode */
-        @media (orientation: landscape) and (max-height: 600px) {
-            .game-header {
-                padding: 10px 0;
-            }
-            
-            .stats-bar {
-                padding: 10px;
-                margin: 10px 0;
-            }
-            
-            .click-area {
-                padding: 15px;
-                min-height: 300px;
-            }
         }
 
         /* Responsive */
@@ -1140,9 +1005,8 @@
                 height: 150px;
             }
             
-            .wheel-container {
-                width: 150px;
-                height: 150px;
+            .achievements-grid {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -1152,7 +1016,7 @@
                 gap: 10px;
             }
             
-            .auth-buttons {
+            .nav-buttons {
                 width: 100%;
                 justify-content: center;
             }
@@ -1168,67 +1032,101 @@
             
             .stat-item {
                 font-size: 1rem;
+                min-width: auto;
             }
             
             .section-title {
                 font-size: 1.5rem;
             }
-            
-            .auth-content {
-                padding: 20px;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- Main Menu -->
-    <div class="page active" id="menuPage">
+    <!-- Header -->
+    <header class="game-header">
+        <div class="container header-content">
+            <div class="logo" onclick="switchPage('menu')">Kingdom Clicker</div>
+            <div class="nav-buttons">
+                <button class="btn btn-nav" onclick="switchPage('game')">
+                    <i class="fas fa-gamepad"></i> Game
+                </button>
+                <button class="btn btn-nav" onclick="switchPage('achievements')">
+                    <i class="fas fa-trophy"></i> Achievements
+                </button>
+                <button class="btn btn-nav" onclick="switchPage('howtoplay')">
+                    <i class="fas fa-book"></i> Guide
+                </button>
+                <button class="btn btn-nav" onclick="switchPage('settings')">
+                    <i class="fas fa-cog"></i> Settings
+                </button>
+                <div id="authButtons">
+                    <button class="btn btn-login" onclick="showAuthModal()">
+                        <i class="fas fa-user"></i> Login
+                    </button>
+                    <button class="btn btn-register" onclick="showRegisterModal()">
+                        <i class="fas fa-user-plus"></i> Register
+                    </button>
+                </div>
+                <div id="userInfo" class="hidden">
+                    <span style="color: var(--gold); margin-right: 10px;" id="welcomeUser"></span>
+                    <button class="btn btn-logout" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Menu Page -->
+    <div class="page-container active" id="menuPage">
         <div class="container">
             <div class="menu-container">
                 <h1 class="menu-title">Kingdom Clicker</h1>
-                <p class="menu-subtitle">Build Your Fantasy Empire One Click at a Time</p>
+                <p class="menu-subtitle">Embark on an epic adventure in this fantasy clicker game. Build your kingdom, collect magical pets, and become the ruler of the realm!</p>
                 
                 <div class="menu-buttons">
-                    <button class="btn menu-btn btn-play" id="playBtn">
+                    <button class="btn menu-btn btn-play" onclick="switchPage('game')">
                         <i class="fas fa-play"></i> Start Adventure
                     </button>
-                    <button class="btn menu-btn" id="howToPlayBtn" style="background: var(--gem-blue);">
+                    <button class="btn menu-btn btn-how-to-play" onclick="switchPage('howtoplay')">
                         <i class="fas fa-book"></i> How to Play
                     </button>
-                    <button class="btn menu-btn btn-quit" id="quitBtn">
+                    <button class="btn menu-btn btn-leaderboard" onclick="switchPage('leaderboard')">
+                        <i class="fas fa-crown"></i> Leaderboard
+                    </button>
+                    <button class="btn menu-btn btn-quit" onclick="quitGame()">
                         <i class="fas fa-door-open"></i> Leave Kingdom
                     </button>
                 </div>
                 
-                <div class="leaderboard-section">
-                    <h2 class="section-title">Royal Leaderboard</h2>
-                    <table class="leaderboard-table">
-                        <thead>
-                            <tr>
-                                <th>Rank</th>
-                                <th>Player</th>
-                                <th>Coins</th>
-                                <th>Level</th>
-                            </tr>
-                        </thead>
-                        <tbody id="menuLeaderboard">
-                            <!-- Leaderboard data akan dimuat -->
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="achievements-section">
-                    <h2 class="section-title">Featured Achievements</h2>
-                    <div class="achievements-grid">
-                        <div class="achievement">
-                            <div class="achievement-icon">👑</div>
-                            <div>First Click</div>
-                            <div class="achievement-reward">Reward: 100 Coins</div>
+                <div class="stats-bar">
+                    <div class="stat-item">
+                        <div class="stat-icon coin-icon">
+                            <i class="fas fa-coins"></i>
                         </div>
-                        <div class="achievement">
-                            <div class="achievement-icon">💰</div>
-                            <div>Coin Collector</div>
-                            <div class="achievement-reward">Reward: 1 Gem</div>
+                        <div>
+                            <div>Total Players</div>
+                            <div class="stat-value" id="totalPlayers">1,234</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-icon exmo-icon">
+                            <i class="fas fa-gem"></i>
+                        </div>
+                        <div>
+                            <div>Active Today</div>
+                            <div class="stat-value" id="activeToday">567</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-icon gem-icon">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <div>
+                            <div>Top Score</div>
+                            <div class="stat-value" id="topScore">9,876,543</div>
                         </div>
                     </div>
                 </div>
@@ -1237,29 +1135,8 @@
     </div>
 
     <!-- Game Page -->
-    <div class="page" id="gamePage">
-        <header class="game-header">
-            <div class="container header-content">
-                <div class="logo">Kingdom Clicker</div>
-                <div class="auth-buttons" id="headerAuthButtons">
-                    <button class="btn btn-login" id="loginBtnHeader">
-                        <i class="fas fa-user"></i> Login
-                    </button>
-                    <button class="btn btn-register" id="registerBtnHeader">
-                        <i class="fas fa-user-plus"></i> Register
-                    </button>
-                </div>
-                <div class="auth-buttons hidden" id="headerUserInfo">
-                    <span style="color: var(--gold); margin-right: 10px;" id="welcomeUser"></span>
-                    <button class="btn btn-logout" id="logoutBtnHeader">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </button>
-                </div>
-            </div>
-        </header>
-
+    <div class="page-container" id="gamePage">
         <div class="container">
-            <!-- Stats Bar -->
             <div class="stats-bar">
                 <div class="stat-item">
                     <div class="stat-icon coin-icon">
@@ -1300,45 +1177,29 @@
                         <div class="stat-value" id="clickPowerValue">1</div>
                     </div>
                 </div>
-                
-                <div class="stat-item">
-                    <div class="stat-icon coin-icon" style="background: var(--success-green);">
-                        <i class="fas fa-trophy"></i>
-                    </div>
-                    <div>
-                        <div>Player Level</div>
-                        <div class="stat-value" id="playerLevel">1</div>
-                    </div>
-                </div>
             </div>
 
-            <!-- Main Game Area -->
             <div class="game-container">
                 <!-- Left: Click Area -->
                 <div class="click-area">
-                    <div class="click-button" id="clickButton"></div>
+                    <div class="click-button" id="clickButton" onclick="handleClick()"></div>
                     <div class="click-power">
                         Each click yields: <span id="clickAmount">1</span> coin(s)
                     </div>
                     
-                    <!-- Convert Section -->
                     <div class="convert-section">
                         <div class="convert-item">
-                            <button class="btn full-width" id="convertCoinsBtn" style="background: var(--secondary-brown);">
+                            <button class="btn full-width" id="convertCoinsBtn" onclick="convertCoinsToExmo()" style="background: var(--secondary-brown);">
                                 <i class="fas fa-exchange-alt"></i> Convert
                             </button>
                             <div class="convert-cost">100 Coins → 1 Exmo</div>
                         </div>
                         <div class="convert-item">
-                            <button class="btn full-width" id="convertExmoBtn" style="background: var(--gem-blue);">
+                            <button class="btn full-width" id="convertExmoBtn" onclick="convertExmoToGems()" style="background: var(--gem-blue);">
                                 <i class="fas fa-exchange-alt"></i> Convert
                             </button>
                             <div class="convert-cost">10 Exmo → 1 Gem</div>
                         </div>
-                    </div>
-                    
-                    <div style="margin-top: 20px; text-align: center; color: var(--light-brown); font-size: 0.9rem;">
-                        <i class="fas fa-info-circle"></i> Conversions unlock special items
                     </div>
                 </div>
 
@@ -1356,7 +1217,7 @@
                                 <div class="upgrade-cost">
                                     <i class="fas fa-coins"></i> <span id="clickCost">100</span>
                                 </div>
-                                <button class="upgrade-btn" id="upgradeClickBtn">Upgrade</button>
+                                <button class="upgrade-btn" id="upgradeClickBtn" onclick="upgradeClick()">Upgrade</button>
                             </div>
                         </div>
                         
@@ -1369,20 +1230,20 @@
                                 <div class="upgrade-cost">
                                     <i class="fas fa-coins"></i> <span id="backpackCost">10000</span>
                                 </div>
-                                <button class="upgrade-btn" id="upgradeBackpackBtn">Upgrade</button>
+                                <button class="upgrade-btn" id="upgradeBackpackBtn" onclick="upgradeBackpack()">Upgrade</button>
                             </div>
                         </div>
                         
                         <div class="upgrade-item">
                             <div class="upgrade-info">
                                 <h4>Auto Clicker</h4>
-                                <div class="upgrade-level">Speed: <span id="autoClickerSpeed">1</span>/s</div>
+                                <div class="upgrade-level">Level: <span id="autoClickerLevel">0</span></div>
                             </div>
                             <div>
                                 <div class="upgrade-cost">
                                     <i class="fas fa-gem"></i> <span id="autoClickerCost">50</span>
                                 </div>
-                                <button class="upgrade-btn" id="upgradeAutoClickerBtn">Upgrade</button>
+                                <button class="upgrade-btn" id="upgradeAutoClickerBtn" onclick="upgradeAutoClicker()">Buy</button>
                             </div>
                         </div>
                     </div>
@@ -1390,11 +1251,11 @@
                     <!-- Shop -->
                     <div class="shop-section">
                         <h3 class="section-title">Royal Shop</h3>
-                        <div class="shop-items">
-                            <!-- More pets will be added dynamically -->
+                        <div class="shop-items" id="shopItems">
+                            <!-- Pets will be loaded here -->
                         </div>
                         <div style="text-align: center; margin-top: 10px;">
-                            <button class="btn" id="refreshShopBtn" style="background: var(--light-brown); font-size: 0.9rem;">
+                            <button class="btn" onclick="refreshShop()" style="background: var(--light-brown); font-size: 0.9rem;">
                                 <i class="fas fa-sync"></i> Refresh Shop (10 Gems)
                             </button>
                         </div>
@@ -1407,7 +1268,7 @@
                             <div class="wheel-pointer"></div>
                             <div class="wheel" id="wheel"></div>
                         </div>
-                        <button class="btn spin-btn" id="spinBtn">
+                        <button class="btn spin-btn" id="spinBtn" onclick="spinWheel()">
                             <i class="fas fa-redo"></i> Spin (1 Exmo)
                         </button>
                         <div style="margin-top: 10px; font-size: 0.9rem; color: var(--silver);">
@@ -1422,7 +1283,7 @@
                 <div class="pets-section">
                     <h3 class="section-title">Royal Pets</h3>
                     <div class="pets-container" id="petsContainer">
-                        <!-- Pets will be added here -->
+                        <!-- Pets will be loaded here -->
                     </div>
                     <div style="text-align: center; margin-top: 10px; color: var(--light-brown);">
                         Total Pet Bonus: +<span id="totalPetBonus">0</span> coins/click
@@ -1435,277 +1296,197 @@
                         <!-- Backpack slots will be generated -->
                     </div>
                     <div style="text-align: center; margin-top: 10px; color: var(--light-brown);">
-                        Slots: <span id="currentSlots">4</span>/<span id="maxSlots">4</span>
+                        Slots: <span id="currentSlots">0</span>/<span id="maxSlots">4</span>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Inventory & Achievements -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
-                <div class="inventory-section">
-                    <h3 class="section-title">Royal Inventory</h3>
-                    <div class="inventory-grid" id="inventoryGrid">
-                        <!-- Inventory items will be added here -->
-                    </div>
-                    <div style="text-align: center; margin-top: 10px; color: var(--light-brown);">
-                        Items: <span id="totalItems">0</span>/50
-                    </div>
-                </div>
-                
-                <div class="achievements-section">
-                    <h3 class="section-title">Your Achievements</h3>
-                    <div class="achievements-grid" id="achievementsGrid">
-                        <!-- Achievements will be added here -->
-                    </div>
-                    <div style="text-align: center; margin-top: 10px; color: var(--light-brown);">
-                        Progress: <span id="achievementsProgress">0</span>/25
-                    </div>
-                </div>
+    <!-- Achievements Page -->
+    <div class="page-container" id="achievementsPage">
+        <div class="container">
+            <h1 class="menu-title" style="margin-bottom: 30px;">Royal Achievements</h1>
+            <div class="achievements-grid" id="achievementsGrid">
+                <!-- Achievements will be loaded here -->
             </div>
+        </div>
+    </div>
 
-            <!-- Quests & Settings -->
-            <div style="display: grid; grid-template-columns: 1fr 300px; gap: 20px; margin-top: 20px;">
-                <div class="quests-section">
-                    <h3 class="section-title">Royal Quests</h3>
-                    <div id="questsContainer">
-                        <!-- Quests will be added here -->
-                    </div>
-                    <div style="text-align: center; margin-top: 10px;">
-                        <button class="btn" id="claimAllQuestsBtn" style="background: var(--gold); color: var(--dark-brown);">
-                            <i class="fas fa-gift"></i> Claim All Rewards
-                        </button>
-                    </div>
+    <!-- How to Play Page -->
+    <div class="page-container" id="howtoplayPage">
+        <div class="container">
+            <h1 class="menu-title" style="margin-bottom: 30px;">How to Play</h1>
+            <div class="how-to-play-content">
+                <div class="how-to-play-section">
+                    <h2>🎮 Game Basics</h2>
+                    <ul>
+                        <li><strong>Click the golden button</strong> to earn coins</li>
+                        <li><strong>Upgrade your click power</strong> to earn more per click</li>
+                        <li><strong>Buy pets</strong> that give you passive bonuses</li>
+                        <li><strong>Complete achievements</strong> for extra rewards</li>
+                        <li><strong>Convert currencies</strong> to unlock special features</li>
+                    </ul>
                 </div>
                 
-                <div class="settings-section">
-                    <h3 class="section-title">Game Settings</h3>
-                    <div class="setting-item">
-                        <span>Sound Effects</span>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="soundToggle" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="setting-item">
-                        <span>Music</span>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="musicToggle" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="setting-item">
-                        <span>Notifications</span>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="notificationsToggle" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <div class="setting-item">
-                        <span>Auto-save</span>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="autosaveToggle" checked>
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div>
-                    <button class="btn full-width" id="saveGameBtn" style="margin-top: 15px; background: var(--success-green);">
-                        <i class="fas fa-save"></i> Save Game
-                    </button>
-                    <button class="btn full-width" id="loadGameBtn" style="margin-top: 10px; background: var(--gem-blue);">
-                        <i class="fas fa-download"></i> Load Game
+                <div class="how-to-play-section">
+                    <h2>💰 Currencies</h2>
+                    <ul>
+                        <li><strong style="color: var(--gold);">Coins</strong>: Basic currency from clicking</li>
+                        <li><strong style="color: var(--silver);">Exmo</strong>: Convert 100 coins to 1 Exmo</li>
+                        <li><strong style="color: var(--gem-purple);">Gems</strong>: Convert 10 Exmo to 1 Gem</li>
+                    </ul>
+                </div>
+                
+                <div class="how-to-play-section">
+                    <h2>🐾 Pets System</h2>
+                    <ul>
+                        <li>Each pet provides bonus coins per click</li>
+                        <li>Pets are bought with gems in the shop</li>
+                        <li>Different pets have different rarity levels</li>
+                        <li>Legendary pets provide the highest bonuses</li>
+                    </ul>
+                </div>
+                
+                <div class="how-to-play-section">
+                    <h2>🏆 Tips & Strategies</h2>
+                    <ul>
+                        <li>Focus on upgrading click power first</li>
+                        <li>Save gems for rare pets and upgrades</li>
+                        <li>Spin the wheel daily for bonus rewards</li>
+                        <li>Complete all achievements for big rewards</li>
+                    </ul>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <button class="btn btn-play" onclick="switchPage('game')" style="padding: 15px 30px;">
+                        <i class="fas fa-play"></i> Start Playing Now
                     </button>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Leaderboard & Chat -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
-                <div class="leaderboard-section">
-                    <h3 class="section-title">Kingdom Leaderboard</h3>
-                    <table class="leaderboard-table">
-                        <thead>
-                            <tr>
-                                <th>Rank</th>
-                                <th>Player</th>
-                                <th>Coins</th>
-                                <th>Gems</th>
-                            </tr>
-                        </thead>
-                        <tbody id="gameLeaderboard">
-                            <!-- Leaderboard data will be loaded -->
-                        </tbody>
-                    </table>
-                    <div style="text-align: center; margin-top: 10px;">
-                        <button class="btn" id="refreshLeaderboardBtn" style="background: var(--light-brown); font-size: 0.9rem;">
-                            <i class="fas fa-sync"></i> Refresh
-                        </button>
-                    </div>
+    <!-- Leaderboard Page -->
+    <div class="page-container" id="leaderboardPage">
+        <div class="container">
+            <h1 class="menu-title" style="margin-bottom: 30px;">Kingdom Leaderboard</h1>
+            <div class="leaderboard-section">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Player</th>
+                            <th>Coins</th>
+                            <th>Gems</th>
+                            <th>Level</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardData">
+                        <!-- Leaderboard data will be loaded here -->
+                    </tbody>
+                </table>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn" onclick="refreshLeaderboard()" style="background: var(--light-brown);">
+                        <i class="fas fa-sync"></i> Refresh Leaderboard
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Page -->
+    <div class="page-container" id="settingsPage">
+        <div class="container">
+            <h1 class="menu-title" style="margin-bottom: 30px;">Game Settings</h1>
+            <div class="settings-content">
+                <div class="setting-item">
+                    <span>Sound Effects</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="soundToggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <span>Background Music</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="musicToggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <span>Notifications</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="notificationsToggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <span>Auto-save</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="autosaveToggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <span>Click Animation</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="animationToggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
                 </div>
                 
-                <div class="chat-section">
-                    <h3 class="section-title">Royal Chat</h3>
-                    <div class="chat-messages" id="chatMessages">
-                        <div class="chat-message">
-                            <span class="user">System:</span> Welcome to Kingdom Clicker! Chat with other players.
-                        </div>
-                    </div>
-                    <div class="chat-input-container">
-                        <input type="text" class="chat-input" id="chatInput" placeholder="Type your message..." disabled>
-                        <button class="btn" id="chatSendBtn" style="background: var(--primary-brown);" disabled>
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
-                    <div style="display: flex; gap: 10px; margin-top: 10px;">
-                        <button class="btn" id="chatEmojiBtn" style="background: var(--light-brown); font-size: 0.9rem; padding: 5px 10px;">
-                            <i class="far fa-smile"></i> Emoji
-                        </button>
-                        <button class="btn" id="clearChatBtn" style="background: var(--danger-red); font-size: 0.9rem; padding: 5px 10px;">
-                            <i class="fas fa-trash"></i> Clear
-                        </button>
-                    </div>
+                <div style="margin-top: 30px; text-align: center;">
+                    <button class="btn" onclick="saveSettings()" style="background: var(--success-green); margin-right: 10px;">
+                        <i class="fas fa-save"></i> Save Settings
+                    </button>
+                    <button class="btn" onclick="resetGameData()" style="background: var(--danger-red);">
+                        <i class="fas fa-trash"></i> Reset Game Data
+                    </button>
+                </div>
+                
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--light-brown);">
+                    <h3 style="color: var(--gold); margin-bottom: 15px;">Game Information</h3>
+                    <p style="color: var(--light-brown); margin-bottom: 10px;">
+                        <strong>Version:</strong> 2.0.0<br>
+                        <strong>Last Updated:</strong> December 2024<br>
+                        <strong>Developed by:</strong> Kingdom Clicker Team
+                    </p>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Auth Modal -->
-    <div class="auth-modal" id="authModal">
-        <div class="auth-content">
-            <button class="auth-close" id="closeAuthModal">
+    <div class="modal-overlay" id="authModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="hideAuthModal()">
                 <i class="fas fa-times"></i>
             </button>
             
-            <h2 class="auth-title" id="authModalTitle">Login to Kingdom</h2>
+            <h2 class="modal-title" id="authModalTitle">Login to Kingdom</h2>
             
             <div class="auth-form" id="loginForm">
                 <input type="text" id="loginUsername" placeholder="Username" required>
                 <input type="password" id="loginPassword" placeholder="Password" required>
-                <button class="btn btn-register" id="submitLogin">
+                <button class="btn btn-register" onclick="login()">
                     <i class="fas fa-sign-in-alt"></i> Enter Kingdom
                 </button>
-                <div style="text-align: center; margin-top: 10px;">
-                    <button class="btn" id="forgotPasswordBtn" style="background: none; color: var(--light-brown); padding: 5px;">
-                        <i class="fas fa-key"></i> Forgot Password?
-                    </button>
-                </div>
                 <p class="auth-toggle">
-                    No royal account? <a id="showRegisterForm">Register here</a>
+                    No royal account? <a onclick="showRegisterForm()">Register here</a>
                 </p>
             </div>
             
             <div class="auth-form hidden" id="registerForm">
                 <input type="text" id="registerUsername" placeholder="Choose Username" required>
-                <input type="email" id="registerEmail" placeholder="Email (optional)">
                 <input type="password" id="registerPassword" placeholder="Choose Password" required>
                 <input type="password" id="registerConfirmPassword" placeholder="Confirm Password" required>
-                <div class="setting-item" style="border: none; padding: 5px 0;">
-                    <span style="font-size: 0.9rem;">Subscribe to newsletter</span>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="newsletterToggle">
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-                <button class="btn btn-register" id="submitRegister">
+                <button class="btn btn-register" onclick="register()">
                     <i class="fas fa-crown"></i> Claim Throne
                 </button>
                 <p class="auth-toggle">
-                    Already have a kingdom? <a id="showLoginForm">Login here</a>
+                    Already have a kingdom? <a onclick="showLoginForm()">Login here</a>
                 </p>
-            </div>
-            
-            <!-- Forgot Password Form -->
-            <div class="auth-form hidden" id="forgotPasswordForm">
-                <input type="email" id="forgotPasswordEmail" placeholder="Enter your email" required>
-                <button class="btn btn-register" id="submitForgotPassword">
-                    <i class="fas fa-paper-plane"></i> Send Reset Link
-                </button>
-                <p class="auth-toggle">
-                    Remember your password? <a id="showLoginFormFromForgot">Login here</a>
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <!-- How to Play Modal -->
-    <div class="auth-modal" id="howToPlayModal">
-        <div class="auth-content" style="max-width: 600px; max-height: 80vh; overflow-y: auto;">
-            <button class="auth-close" id="closeHowToPlayModal">
-                <i class="fas fa-times"></i>
-            </button>
-            
-            <h2 class="auth-title">How to Play Kingdom Clicker</h2>
-            
-            <div style="margin: 20px 0;">
-                <h3 style="color: var(--gold); margin-bottom: 10px;">🎮 Game Basics</h3>
-                <p style="margin-bottom: 15px; line-height: 1.6;">
-                    1. <strong>Click the golden button</strong> to earn coins<br>
-                    2. <strong>Upgrade your click power</strong> to earn more per click<br>
-                    3. <strong>Buy pets</strong> that give you passive bonuses<br>
-                    4. <strong>Complete quests</strong> for extra rewards<br>
-                    5. <strong>Convert currencies</strong> to unlock special features
-                </p>
-                
-                <h3 style="color: var(--gold); margin: 20px 0 10px;">💰 Currencies</h3>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
-                    <div style="background: rgba(255,215,0,0.1); padding: 10px; border-radius: 8px;">
-                        <strong style="color: var(--gold);">Coins</strong><br>
-                        Basic currency from clicking
-                    </div>
-                    <div style="background: rgba(192,192,192,0.1); padding: 10px; border-radius: 8px;">
-                        <strong style="color: var(--silver);">Exmo</strong><br>
-                        Convert 100 coins to 1 Exmo
-                    </div>
-                    <div style="background: rgba(147,112,219,0.1); padding: 10px; border-radius: 8px;">
-                        <strong style="color: var(--gem-purple);">Gems</strong><br>
-                        Convert 10 Exmo to 1 Gem
-                    </div>
-                    <div style="background: rgba(34,139,34,0.1); padding: 10px; border-radius: 8px;">
-                        <strong style="color: var(--success-green);">Experience</strong><br>
-                        Gain XP from all activities
-                    </div>
-                </div>
-                
-                <h3 style="color: var(--gold); margin: 20px 0 10px;">🏆 Tips & Strategies</h3>
-                <ul style="padding-left: 20px; margin-bottom: 20px; line-height: 1.6;">
-                    <li>Focus on upgrading click power first</li>
-                    <li>Save gems for rare pets and upgrades</li>
-                    <li>Spin the wheel daily for bonus rewards</li>
-                    <li>Complete all daily quests</li>
-                    <li>Join the community chat for tips</li>
-                </ul>
-                
-                <div style="text-align: center; margin-top: 20px;">
-                    <button class="btn btn-register" id="startTutorialBtn">
-                        <i class="fas fa-play-circle"></i> Start Tutorial
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Emoji Picker -->
-    <div class="auth-modal hidden" id="emojiPickerModal">
-        <div class="auth-content" style="max-width: 400px;">
-            <button class="auth-close" id="closeEmojiPicker">
-                <i class="fas fa-times"></i>
-            </button>
-            
-            <h2 class="auth-title">Select Emoji</h2>
-            
-            <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 20px 0;">
-                <button class="emoji-btn" data-emoji="😄">😄</button>
-                <button class="emoji-btn" data-emoji="😎">😎</button>
-                <button class="emoji-btn" data-emoji="🎮">🎮</button>
-                <button class="emoji-btn" data-emoji="💰">💰</button>
-                <button class="emoji-btn" data-emoji="👑">👑</button>
-                <button class="emoji-btn" data-emoji="🐉">🐉</button>
-                <button class="emoji-btn" data-emoji="🦄">🦄</button>
-                <button class="emoji-btn" data-emoji="🔥">🔥</button>
-                <button class="emoji-btn" data-emoji="⚔️">⚔️</button>
-                <button class="emoji-btn" data-emoji="🏰">🏰</button>
-                <button class="emoji-btn" data-emoji="✨">✨</button>
-                <button class="emoji-btn" data-emoji="🌟">🌟</button>
-                <button class="emoji-btn" data-emoji="💎">💎</button>
-                <button class="emoji-btn" data-emoji="🎯">🎯</button>
-                <button class="emoji-btn" data-emoji="🏆">🏆</button>
             </div>
         </div>
     </div>
@@ -1713,10 +1494,10 @@
     <script>
         // ============== SUPABASE CONFIGURATION ==============
         const SUPABASE_URL = 'https://bxhrnnwfqlsoviysqcdw.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ4aHJubndmcWxzb3ZpeXNxY2R3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU3ODkzNDIsImV4cCI6MjA4MTM2NTM0Mn0.O7fpv0TrDd-8ZE3Z9B5zWyAuWROPis5GRnKMxmqncX8';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ4aHJubndmcWxzb3ZpeXNxY2R3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU3ODkzNDIsImV4cCI6MjA4MTM2NTM0Mn0.O7fpv0TrDd-8ZE3Z9B5zWyAuWROPis5GRnKMxmqncX8';
         
         // Initialize Supabase client
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         
         // ============== GLOBAL VARIABLES ==============
         let currentUser = null;
@@ -1730,77 +1511,57 @@
             backpackLevel: 1,
             autoClickerLevel: 0,
             autoClickerSpeed: 0,
-            playerLevel: 1,
-            playerXP: 0,
-            playerXPNeeded: 100,
+            autoClickerActive: false,
             pets: [],
-            inventory: {},
-            achievements: {},
-            activeQuests: [],
-            completedQuests: [],
-            multipliers: [],
+            achievements: [],
             settings: {
                 sound: true,
                 music: true,
                 notifications: true,
-                autosave: true
+                autosave: true,
+                animation: true
             },
             stats: {
                 totalClicks: 0,
-                totalCoinsEarned: 0,
-                totalSpins: 0,
-                playTime: 0,
-                petsCollected: 0
+                totalCoins: 0,
+                totalExmo: 0,
+                totalGems: 0
             },
             daily: {
-                lastLogin: null,
-                spinsToday: 0,
-                questsCompletedToday: 0
+                spins: 0,
+                lastSpin: null
             }
         };
         
-        // Enhanced pets data with more variety
-        const petsData = {
-            dragon: { name: "Dragon", icon: "🐉", price: 50, basePower: 10, rarity: "Legendary", color: "var(--dragon-red)" },
-            unicorn: { name: "Unicorn", icon: "🦄", price: 30, basePower: 5, rarity: "Epic", color: "var(--unicorn-pink)" },
-            phoenix: { name: "Phoenix", icon: "🔥", price: 100, basePower: 20, rarity: "Mythic", color: "var(--phoenix-orange)" },
-            griffin: { name: "Griffin", icon: "🦅", price: 40, basePower: 8, rarity: "Epic", color: "var(--griffin-brown)" },
-            fairy: { name: "Forest Fairy", icon: "🧚", price: 25, basePower: 3, rarity: "Rare", color: "var(--fairy-green)" },
-            kraken: { name: "Kraken", icon: "🐙", price: 75, basePower: 15, rarity: "Legendary", color: "var(--kraken-blue)" },
-            werewolf: { name: "Werewolf", icon: "🐺", price: 35, basePower: 6, rarity: "Rare", color: "var(--werewolf-gray)" },
-            vampire: { name: "Vampire Bat", icon: "🦇", price: 45, basePower: 7, rarity: "Epic", color: "var(--vampire-purple)" },
-            golem: { name: "Stone Golem", icon: "🗿", price: 60, basePower: 12, rarity: "Epic", color: "var(--golem-stone)" },
-            basilisk: { name: "Basilisk", icon: "🐍", price: 150, basePower: 25, rarity: "Mythic", color: "var(--basilisk-yellow)" },
-            imp: { name: "Fire Imp", icon: "👿", price: 20, basePower: 2, rarity: "Common", color: "var(--danger-red)" },
-            pegasus: { name: "Pegasus", icon: "🦄", price: 55, basePower: 9, rarity: "Epic", color: "var(--gem-purple)" },
-            hydra: { name: "Hydra", icon: "🐲", price: 200, basePower: 30, rarity: "Mythic", color: "var(--success-green)" },
-            pixie: { name: "Crystal Pixie", icon: "🧚‍♀️", price: 15, basePower: 1, rarity: "Common", color: "var(--gem-blue)" },
-            cyclops: { name: "Cyclops", icon: "👁️", price: 80, basePower: 18, rarity: "Legendary", color: "var(--primary-brown)" }
-        };
+        // Pets data
+        const petsData = [
+            { id: 'dragon', name: "Dragon", icon: "🐉", price: 50, power: 10, rarity: "Legendary", color: "var(--dragon-red)" },
+            { id: 'unicorn', name: "Unicorn", icon: "🦄", price: 30, power: 5, rarity: "Epic", color: "var(--unicorn-pink)" },
+            { id: 'phoenix', name: "Phoenix", icon: "🔥", price: 100, power: 20, rarity: "Mythic", color: "var(--phoenix-orange)" },
+            { id: 'griffin', name: "Griffin", icon: "🦅", price: 40, power: 8, rarity: "Epic", color: "var(--griffin-brown)" },
+            { id: 'fairy', name: "Forest Fairy", icon: "🧚", price: 25, power: 3, rarity: "Rare", color: "var(--fairy-green)" },
+            { id: 'kraken', name: "Kraken", icon: "🐙", price: 75, power: 15, rarity: "Legendary", color: "var(--kraken-blue)" },
+            { id: 'werewolf', name: "Werewolf", icon: "🐺", price: 35, power: 6, rarity: "Rare", color: "var(--werewolf-gray)" },
+            { id: 'vampire', name: "Vampire Bat", icon: "🦇", price: 45, power: 7, rarity: "Epic", color: "var(--vampire-purple)" },
+            { id: 'golem', name: "Stone Golem", icon: "🗿", price: 60, power: 12, rarity: "Epic", color: "var(--golem-stone)" },
+            { id: 'basilisk', name: "Basilisk", icon: "🐍", price: 150, power: 25, rarity: "Mythic", color: "var(--basilisk-yellow)" }
+        ];
         
-        // Achievement data
+        // Achievements data
         const achievementsData = [
-            { id: "first_click", name: "First Click", icon: "👆", description: "Make your first click", reward: { coins: 100 }, condition: (stats) => stats.totalClicks >= 1 },
-            { id: "coin_collector", name: "Coin Collector", icon: "💰", description: "Collect 1000 coins", reward: { gems: 1 }, condition: (stats) => stats.totalCoinsEarned >= 1000 },
-            { id: "pet_lover", name: "Pet Lover", icon: "❤️", description: "Collect 3 pets", reward: { coins: 500 }, condition: (stats) => stats.petsCollected >= 3 },
-            { id: "click_master", name: "Click Master", icon: "⚡", description: "Reach click power 10", reward: { gems: 5 }, condition: (game) => game.clickPower >= 10 },
-            { id: "rich_king", name: "Rich King", icon: "👑", description: "Have 10,000 coins", reward: { gems: 10 }, condition: (game) => game.coins >= 10000 },
-            { id: "gambler", name: "Wheel Gambler", icon: "🎰", description: "Spin wheel 10 times", reward: { exmo: 5 }, condition: (stats) => stats.totalSpins >= 10 },
-            { id: "backpacker", name: "Backpacker", icon: "🎒", description: "Upgrade backpack to 16 slots", reward: { coins: 1000 }, condition: (game) => game.backpackSlots >= 16 },
-            { id: "pet_hoarder", name: "Pet Hoarder", icon: "🐾", description: "Collect 10 pets", reward: { gems: 20 }, condition: (stats) => stats.petsCollected >= 10 },
-            { id: "gem_king", name: "Gem King", icon: "💎", description: "Have 100 gems", reward: { coins: 5000 }, condition: (game) => game.gems >= 100 },
-            { id: "daily_player", name: "Daily Player", icon: "📅", description: "Login for 7 days", reward: { gems: 15 }, condition: (daily) => daily.lastLogin && (new Date() - new Date(daily.lastLogin)) < 7 * 24 * 60 * 60 * 1000 }
+            { id: 'first_click', name: "First Click", icon: "👆", description: "Make your first click", reward: { coins: 100 } },
+            { id: 'coin_collector', name: "Coin Collector", icon: "💰", description: "Collect 1000 coins", reward: { gems: 1 } },
+            { id: 'pet_lover', name: "Pet Lover", icon: "❤️", description: "Collect 3 pets", reward: { coins: 500 } },
+            { id: 'click_master', name: "Click Master", icon: "⚡", description: "Reach click power 10", reward: { gems: 5 } },
+            { id: 'rich_king', name: "Rich King", icon: "👑", description: "Have 10,000 coins", reward: { gems: 10 } },
+            { id: 'gambler', name: "Wheel Gambler", icon: "🎰", description: "Spin wheel 10 times", reward: { exmo: 5 } },
+            { id: 'backpacker', name: "Backpacker", icon: "🎒", description: "Upgrade backpack to 16 slots", reward: { coins: 1000 } },
+            { id: 'pet_hoarder', name: "Pet Hoarder", icon: "🐾", description: "Collect 10 pets", reward: { gems: 20 } },
+            { id: 'gem_king', name: "Gem King", icon: "💎", description: "Have 100 gems", reward: { coins: 5000 } },
+            { id: 'legendary_ruler', name: "Legendary Ruler", icon: "🏰", description: "Complete all achievements", reward: { gems: 50, coins: 10000 } }
         ];
         
-        // Quests data
-        const questsData = [
-            { id: "click_100", name: "Click Frenzy", description: "Click 100 times", icon: "👆", reward: { coins: 500 }, goal: 100, progress: 0, type: "clicks" },
-            { id: "earn_5000", name: "Coin Rain", description: "Earn 5000 coins", icon: "💰", reward: { exmo: 2 }, goal: 5000, progress: 0, type: "coins" },
-            { id: "buy_pet", name: "Pet Companion", description: "Buy any pet", icon: "🐾", reward: { gems: 1 }, goal: 1, progress: 0, type: "pets" },
-            { id: "upgrade_click", name: "Power Up", description: "Upgrade click power 5 times", icon: "⚡", reward: { coins: 1000 }, goal: 5, progress: 0, type: "upgrades" },
-            { id: "spin_wheel", name: "Wheel of Fortune", description: "Spin wheel 3 times", icon: "🎰", reward: { exmo: 1 }, goal: 3, progress: 0, type: "spins" }
-        ];
-        
+        // Wheel multipliers
         const wheelMultipliers = [
             { multiplier: 2, probability: 30 },
             { multiplier: 3, probability: 20 },
@@ -1818,378 +1579,97 @@
             { multiplier: 5000, probability: 0.1 }
         ];
 
-        // Inventory items
-        const inventoryItems = {
-            potion: { name: "Healing Potion", icon: "🧪", description: "Restores health" },
-            scroll: { name: "Magic Scroll", icon: "📜", description: "Unlocks spells" },
-            key: { name: "Golden Key", icon: "🔑", description: "Opens chests" },
-            ring: { name: "Magic Ring", icon: "💍", description: "Boosts stats" },
-            amulet: { name: "Protection Amulet", icon: "📿", description: "Provides defense" },
-            book: { name: "Spell Book", icon: "📖", description: "Teaches magic" },
-            crystal: { name: "Magic Crystal", icon: "🔮", description: "Enhances powers" },
-            herb: { name: "Rare Herb", icon: "🌿", description: "Used in alchemy" }
-        };
-
         // ============== INITIALIZATION ==============
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Kingdom Clicker Initializing...');
             
-            // Setup semua event listeners
-            setupAllEventListeners();
-            
-            // Initialize game data
+            // Load game data from localStorage
             loadGameData();
             
-            // Update UI
-            updateGameUI();
-            initializeBackpack();
-            initializeShop();
-            initializeAchievements();
-            initializeQuests();
-            initializeInventory();
+            // Setup all event listeners
+            setupEventListeners();
             
-            // Start auto-save interval
-            setInterval(autoSaveGame, 30000); // Auto-save every 30 seconds
+            // Initialize game
+            initGame();
             
-            // Start play time counter
-            setInterval(() => {
-                if (currentUser) {
-                    gameData.stats.playTime++;
-                    if (gameData.stats.playTime % 60 === 0) {
-                        // Award XP for every minute played
-                        addPlayerXP(5);
-                    }
-                }
-            }, 1000);
+            // Load initial data
+            loadShopItems();
+            loadAchievements();
+            loadLeaderboard();
             
-            console.log('Kingdom Clicker Initialized Successfully!');
+            console.log('Game initialized successfully!');
+            
+            // Check auth status
+            checkAuthStatus();
         });
 
-        // ============== EVENT LISTENERS SETUP ==============
-        function setupAllEventListeners() {
-            console.log('Setting up event listeners...');
-            
-            // Menu Buttons
-            document.getElementById('playBtn').addEventListener('click', () => switchPage('gamePage'));
-            document.getElementById('howToPlayBtn').addEventListener('click', showHowToPlay);
-            document.getElementById('quitBtn').addEventListener('click', confirmQuit);
-            
-            // Header Buttons
-            document.getElementById('loginBtnHeader').addEventListener('click', showAuthModal);
-            document.getElementById('registerBtnHeader').addEventListener('click', () => {
-                showAuthModal();
-                showRegisterForm();
-            });
-            document.getElementById('logoutBtnHeader').addEventListener('click', logout);
-            
-            // Auth Modal
-            document.getElementById('closeAuthModal').addEventListener('click', hideAuthModal);
-            document.getElementById('showRegisterForm').addEventListener('click', (e) => {
-                e.preventDefault();
-                showRegisterForm();
-            });
-            document.getElementById('showLoginForm').addEventListener('click', (e) => {
-                e.preventDefault();
-                showLoginForm();
-            });
-            document.getElementById('showLoginFormFromForgot').addEventListener('click', (e) => {
-                e.preventDefault();
-                showLoginForm();
-            });
-            document.getElementById('submitLogin').addEventListener('click', loginWithSupabase);
-            document.getElementById('submitRegister').addEventListener('click', registerWithSupabase);
-            document.getElementById('forgotPasswordBtn').addEventListener('click', showForgotPasswordForm);
-            document.getElementById('submitForgotPassword').addEventListener('click', handleForgotPassword);
-            
-            // How to Play Modal
-            document.getElementById('closeHowToPlayModal').addEventListener('click', hideHowToPlayModal);
-            document.getElementById('startTutorialBtn').addEventListener('click', startTutorial);
-            
-            // Game Mechanics
-            document.getElementById('clickButton').addEventListener('click', handleClick);
-            document.getElementById('convertCoinsBtn').addEventListener('click', convertCoinsToExmo);
-            document.getElementById('convertExmoBtn').addEventListener('click', convertExmoToGems);
-            
-            // Upgrades
-            document.getElementById('upgradeClickBtn').addEventListener('click', upgradeClick);
-            document.getElementById('upgradeBackpackBtn').addEventListener('click', upgradeBackpack);
-            document.getElementById('upgradeAutoClickerBtn').addEventListener('click', upgradeAutoClicker);
-            
-            // Shop
-            document.getElementById('refreshShopBtn').addEventListener('click', refreshShop);
-            
-            // Spin Wheel
-            document.getElementById('spinBtn').addEventListener('click', spinWheel);
-            
-            // Quests
-            document.getElementById('claimAllQuestsBtn').addEventListener('click', claimAllQuestRewards);
-            
-            // Settings
-            document.getElementById('saveGameBtn').addEventListener('click', saveGameToSupabase);
-            document.getElementById('loadGameBtn').addEventListener('click', loadGameFromSupabase);
-            document.getElementById('soundToggle').addEventListener('change', toggleSound);
-            document.getElementById('musicToggle').addEventListener('change', toggleMusic);
-            document.getElementById('notificationsToggle').addEventListener('change', toggleNotifications);
-            document.getElementById('autosaveToggle').addEventListener('change', toggleAutosave);
-            
-            // Leaderboard
-            document.getElementById('refreshLeaderboardBtn').addEventListener('click', loadLeaderboard);
-            
-            // Chat
-            document.getElementById('chatSendBtn').addEventListener('click', sendChatMessage);
-            document.getElementById('chatInput').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendChatMessage();
-                }
-            });
-            document.getElementById('chatEmojiBtn').addEventListener('click', showEmojiPicker);
-            document.getElementById('clearChatBtn').addEventListener('click', clearChat);
-            document.getElementById('closeEmojiPicker').addEventListener('click', hideEmojiPicker);
-            
-            // Emoji picker buttons
-            document.querySelectorAll('.emoji-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const emoji = btn.getAttribute('data-emoji');
-                    insertEmoji(emoji);
-                });
+        // ============== GAME INITIALIZATION ==============
+        function initGame() {
+            updateGameUI();
+            initBackpack();
+            initAutoClicker();
+            checkAchievements();
+        }
+        
+        function setupEventListeners() {
+            // Settings toggles
+            document.getElementById('soundToggle').addEventListener('change', function() {
+                gameData.settings.sound = this.checked;
+                saveGameData();
             });
             
-            console.log('All event listeners setup complete!');
+            document.getElementById('musicToggle').addEventListener('change', function() {
+                gameData.settings.music = this.checked;
+                saveGameData();
+            });
+            
+            document.getElementById('notificationsToggle').addEventListener('change', function() {
+                gameData.settings.notifications = this.checked;
+                saveGameData();
+            });
+            
+            document.getElementById('autosaveToggle').addEventListener('change', function() {
+                gameData.settings.autosave = this.checked;
+                saveGameData();
+            });
+            
+            document.getElementById('animationToggle').addEventListener('change', function() {
+                gameData.settings.animation = this.checked;
+                saveGameData();
+            });
         }
 
-        // ============== SUPABASE AUTH FUNCTIONS ==============
-        async function loginWithSupabase() {
-            const username = document.getElementById('loginUsername').value.trim();
-            const password = document.getElementById('loginPassword').value;
+        // ============== PAGE NAVIGATION ==============
+        function switchPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page-container');
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
             
-            if (!username || !password) {
-                showNotification('Please enter username and password');
-                return;
-            }
-            
-            try {
-                const { data, error } = await supabase.auth.signInWithPassword({
-                    email: `${username}@kingdomclicker.com`,
-                    password: password
-                });
+            // Show selected page
+            const targetPage = document.getElementById(pageId + 'Page');
+            if (targetPage) {
+                targetPage.classList.add('active');
                 
-                if (error) throw error;
-                
-                currentUser = {
-                    id: data.user.id,
-                    username: username,
-                    email: data.user.email
-                };
-                
-                await loadUserData();
-                updateUIAfterLogin();
-                hideAuthModal();
-                showNotification(`Welcome back to the kingdom, ${username}!`);
-                
-            } catch (error) {
-                console.error('Login error:', error);
-                showNotification('Login failed. Please check your credentials.');
-            }
-        }
-        
-        async function registerWithSupabase() {
-            const username = document.getElementById('registerUsername').value.trim();
-            const email = document.getElementById('registerEmail').value.trim();
-            const password = document.getElementById('registerPassword').value;
-            const confirmPassword = document.getElementById('registerConfirmPassword').value;
-            
-            if (!username || !password || !confirmPassword) {
-                showNotification('Please fill all required fields');
-                return;
-            }
-            
-            if (password !== confirmPassword) {
-                showNotification('Passwords do not match');
-                return;
-            }
-            
-            if (username.length < 3 || username.length > 20) {
-                showNotification('Username must be 3-20 characters');
-                return;
-            }
-            
-            if (password.length < 6) {
-                showNotification('Password must be at least 6 characters');
-                return;
-            }
-            
-            const userEmail = email || `${username}@kingdomclicker.com`;
-            
-            try {
-                // Check if username exists
-                const { data: existingUser } = await supabase
-                    .from('users')
-                    .select('username')
-                    .eq('username', username)
-                    .single();
-                
-                if (existingUser) {
-                    showNotification('Username already taken');
-                    return;
+                // Update page-specific content
+                switch(pageId) {
+                    case 'leaderboard':
+                        refreshLeaderboard();
+                        break;
+                    case 'achievements':
+                        loadAchievements();
+                        break;
+                    case 'game':
+                        updateGameUI();
+                        break;
                 }
-                
-                // Create auth user
-                const { data: authData, error: authError } = await supabase.auth.signUp({
-                    email: userEmail,
-                    password: password,
-                    options: {
-                        data: {
-                            username: username
-                        }
-                    }
-                });
-                
-                if (authError) throw authError;
-                
-                // Create user profile
-                const { error: profileError } = await supabase
-                    .from('users')
-                    .insert([
-                        {
-                            id: authData.user.id,
-                            username: username,
-                            email: userEmail,
-                            created_at: new Date().toISOString(),
-                            last_login: new Date().toISOString()
-                        }
-                    ]);
-                
-                if (profileError) throw profileError;
-                
-                currentUser = {
-                    id: authData.user.id,
-                    username: username,
-                    email: userEmail
-                };
-                
-                // Initialize user game data
-                await initializeUserGameData();
-                
-                updateUIAfterLogin();
-                hideAuthModal();
-                showNotification(`Welcome to the kingdom, ${username}! Your adventure begins!`);
-                
-            } catch (error) {
-                console.error('Registration error:', error);
-                showNotification('Registration failed. Please try again.');
             }
-        }
-        
-        async function logout() {
-            if (confirm('Are you sure you want to logout?')) {
-                await supabase.auth.signOut();
-                currentUser = null;
-                localStorage.removeItem('clickerGameData');
-                updateUIAfterLogin();
-                showNotification('You have left the kingdom');
-                switchPage('menuPage');
-            }
-        }
-        
-        async function loadUserData() {
-            if (!currentUser) return;
             
-            try {
-                // Load game data from Supabase
-                const { data, error } = await supabase
-                    .from('user_game_data')
-                    .select('*')
-                    .eq('user_id', currentUser.id)
-                    .single();
-                
-                if (error) throw error;
-                
-                if (data) {
-                    gameData = JSON.parse(data.game_data);
-                    
-                    // Update daily login
-                    const lastLogin = new Date(gameData.daily.lastLogin || 0);
-                    const today = new Date();
-                    if (lastLogin.getDate() !== today.getDate()) {
-                        gameData.daily.lastLogin = today.toISOString();
-                        gameData.daily.spinsToday = 0;
-                        gameData.daily.questsCompletedToday = 0;
-                        showNotification('Daily bonuses refreshed!');
-                    }
-                } else {
-                    // Initialize new user data
-                    await initializeUserGameData();
-                }
-                
-                updateGameUI();
-                
-            } catch (error) {
-                console.error('Error loading user data:', error);
-                showNotification('Error loading game data');
-            }
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-        
-        async function initializeUserGameData() {
-            const initialGameData = {
-                coins: 100,
-                exmo: 0,
-                gems: 0,
-                clickPower: 1,
-                clickLevel: 1,
-                backpackSlots: 4,
-                backpackLevel: 1,
-                autoClickerLevel: 0,
-                autoClickerSpeed: 0,
-                playerLevel: 1,
-                playerXP: 0,
-                playerXPNeeded: 100,
-                pets: [],
-                inventory: {},
-                achievements: {},
-                activeQuests: questsData.map(q => ({ ...q, progress: 0 })),
-                completedQuests: [],
-                multipliers: [],
-                settings: {
-                    sound: true,
-                    music: true,
-                    notifications: true,
-                    autosave: true
-                },
-                stats: {
-                    totalClicks: 0,
-                    totalCoinsEarned: 0,
-                    totalSpins: 0,
-                    playTime: 0,
-                    petsCollected: 0
-                },
-                daily: {
-                    lastLogin: new Date().toISOString(),
-                    spinsToday: 0,
-                    questsCompletedToday: 0
-                }
-            };
-            
-            gameData = initialGameData;
-            
-            try {
-                const { error } = await supabase
-                    .from('user_game_data')
-                    .insert([
-                        {
-                            user_id: currentUser.id,
-                            game_data: JSON.stringify(initialGameData),
-                            last_updated: new Date().toISOString()
-                        }
-                    ]);
-                
-                if (error) throw error;
-                
-            } catch (error) {
-                console.error('Error initializing game data:', error);
-            }
-        }
-        
+
         // ============== GAME MECHANICS ==============
         function handleClick() {
             if (!currentUser) {
@@ -2198,965 +1678,39 @@
                 return;
             }
             
-            // Update stats
-            gameData.stats.totalClicks++;
-            
-            // Calculate click amount
-            let clickAmount = gameData.clickPower;
+            // Calculate total click power
+            let totalClickPower = gameData.clickPower;
             
             // Add pet bonuses
             gameData.pets.forEach(pet => {
-                const petData = petsData[pet.type];
+                const petData = petsData.find(p => p.id === pet.type);
                 if (petData) {
-                    clickAmount += petData.basePower * pet.level;
+                    totalClickPower += petData.power * pet.level;
                 }
             });
             
-            // Apply active multipliers
-            gameData.multipliers.forEach(multiplier => {
-                if (multiplier.active) {
-                    clickAmount *= multiplier.value;
-                }
-            });
+            // Add coins
+            gameData.coins += totalClickPower;
+            gameData.stats.totalClicks++;
+            gameData.stats.totalCoins += totalClickPower;
             
-            // Add coins and XP
-            gameData.coins += clickAmount;
-            gameData.stats.totalCoinsEarned += clickAmount;
-            addPlayerXP(Math.floor(clickAmount / 10));
-            
-            // Update quest progress
-            updateQuestProgress('clicks', 1);
-            updateQuestProgress('coins', clickAmount);
+            // Check for achievements
+            checkAchievements();
             
             // Update UI
             updateGameUI();
-            showClickEffect(clickAmount);
             
-            // Check achievements
-            checkAchievements();
+            // Show click effect if enabled
+            if (gameData.settings.animation) {
+                showClickEffect(totalClickPower);
+            }
             
             // Auto-save if enabled
             if (gameData.settings.autosave) {
-                saveGameToSupabase();
+                saveGameData();
             }
         }
         
-        function convertCoinsToExmo() {
-            if (!currentUser) {
-                showNotification('Please login to convert coins');
-                return;
-            }
-            
-            if (gameData.coins >= 100) {
-                gameData.coins -= 100;
-                gameData.exmo += 1;
-                addPlayerXP(5);
-                updateGameUI();
-                showNotification('Converted 100 coins to 1 Exmo!');
-                playSound('convert');
-            } else {
-                showNotification('Need at least 100 coins to convert');
-            }
-        }
-        
-        function convertExmoToGems() {
-            if (!currentUser) {
-                showNotification('Please login to convert Exmo');
-                return;
-            }
-            
-            if (gameData.exmo >= 10) {
-                gameData.exmo -= 10;
-                gameData.gems += 1;
-                addPlayerXP(10);
-                updateGameUI();
-                showNotification('Converted 10 Exmo to 1 Gem!');
-                playSound('convert');
-            } else {
-                showNotification('Need at least 10 Exmo to convert');
-            }
-        }
-        
-        function upgradeClick() {
-            const cost = calculateClickUpgradeCost();
-            
-            if (gameData.coins >= cost) {
-                gameData.coins -= cost;
-                gameData.clickLevel++;
-                gameData.clickPower *= 2;
-                addPlayerXP(25);
-                
-                updateGameUI();
-                showNotification(`Click power upgraded to level ${gameData.clickLevel}!`);
-                playSound('upgrade');
-                updateQuestProgress('upgrades', 1);
-                checkAchievements();
-            } else {
-                showNotification(`Need ${cost} coins to upgrade`);
-            }
-        }
-        
-        function calculateClickUpgradeCost() {
-            return 100 * Math.pow(2, gameData.clickLevel - 1);
-        }
-        
-        function upgradeBackpack() {
-            const cost = calculateBackpackUpgradeCost();
-            
-            if (gameData.coins >= cost) {
-                gameData.coins -= cost;
-                gameData.backpackLevel++;
-                gameData.backpackSlots = 4 * Math.pow(2, gameData.backpackLevel - 1);
-                addPlayerXP(50);
-                
-                updateGameUI();
-                initializeBackpack();
-                showNotification(`Backpack upgraded to ${gameData.backpackSlots} slots!`);
-                playSound('upgrade');
-                checkAchievements();
-            } else {
-                showNotification(`Need ${cost} coins to upgrade backpack`);
-            }
-        }
-        
-        function calculateBackpackUpgradeCost() {
-            return 10000 * Math.pow(2, gameData.backpackLevel - 1);
-        }
-        
-        function upgradeAutoClicker() {
-            const cost = calculateAutoClickerCost();
-            
-            if (gameData.gems >= cost) {
-                gameData.gems -= cost;
-                gameData.autoClickerLevel++;
-                gameData.autoClickerSpeed = gameData.autoClickerLevel;
-                addPlayerXP(100);
-                
-                // Start auto-clicker if not already running
-                if (gameData.autoClickerSpeed > 0 && !window.autoClickerInterval) {
-                    startAutoClicker();
-                }
-                
-                updateGameUI();
-                showNotification(`Auto-clicker upgraded to level ${gameData.autoClickerLevel}!`);
-                playSound('upgrade');
-            } else {
-                showNotification(`Need ${cost} gems to upgrade auto-clicker`);
-            }
-        }
-        
-        function calculateAutoClickerCost() {
-            return 50 * Math.pow(2, gameData.autoClickerLevel);
-        }
-        
-        function startAutoClicker() {
-            if (window.autoClickerInterval) {
-                clearInterval(window.autoClickerInterval);
-            }
-            
-            window.autoClickerInterval = setInterval(() => {
-                if (currentUser) {
-                    handleClick();
-                }
-            }, 1000 / gameData.autoClickerSpeed);
-        }
-        
-        function buyPet(petType, price) {
-            if (!currentUser) {
-                showNotification('Please login to buy pets');
-                return;
-            }
-            
-            if (gameData.gems >= price) {
-                // Check backpack space
-                if (gameData.pets.length >= gameData.backpackSlots) {
-                    showNotification('Not enough space in backpack!');
-                    return;
-                }
-                
-                gameData.gems -= price;
-                gameData.pets.push({
-                    type: petType,
-                    level: 1,
-                    acquired: new Date().toISOString()
-                });
-                
-                gameData.stats.petsCollected++;
-                addPlayerXP(20);
-                
-                updateGameUI();
-                updatePetsDisplay();
-                initializeBackpack();
-                showNotification(`You bought a ${petsData[petType].name}!`);
-                playSound('purchase');
-                updateQuestProgress('pets', 1);
-                checkAchievements();
-            } else {
-                showNotification(`Need ${price} gems to buy this pet`);
-            }
-        }
-        
-        function spinWheel() {
-            if (!currentUser) {
-                showNotification('Please login to spin the wheel');
-                return;
-            }
-            
-            if (gameData.exmo < 1) {
-                showNotification('Need 1 Exmo to spin the wheel');
-                return;
-            }
-            
-            if (gameData.daily.spinsToday >= 10) {
-                showNotification('Daily spin limit reached! Come back tomorrow.');
-                return;
-            }
-            
-            gameData.exmo -= 1;
-            gameData.daily.spinsToday++;
-            gameData.stats.totalSpins++;
-            
-            // Calculate total probability
-            const totalProbability = wheelMultipliers.reduce((sum, item) => sum + item.probability, 0);
-            
-            // Generate random number
-            let random = Math.random() * totalProbability;
-            let selectedMultiplier = wheelMultipliers[0];
-            
-            // Select multiplier based on probability
-            for (const item of wheelMultipliers) {
-                if (random <= item.probability) {
-                    selectedMultiplier = item;
-                    break;
-                }
-                random -= item.probability;
-            }
-            
-            // Apply multiplier
-            const multiplier = {
-                value: selectedMultiplier.multiplier,
-                active: true,
-                expires: Date.now() + (5 * 60 * 1000) // 5 minutes
-            };
-            
-            gameData.multipliers.push(multiplier);
-            
-            // Animate wheel
-            const wheel = document.getElementById('wheel');
-            const spins = 5 + Math.random() * 3;
-            const degrees = spins * 360 + (selectedMultiplier.multiplier * 10);
-            
-            wheel.style.transition = 'transform 4s cubic-bezier(0.2, 0.8, 0.3, 1)';
-            wheel.style.transform = `rotate(${degrees}deg)`;
-            
-            // Show result
-            setTimeout(() => {
-                showNotification(`Wheel result: x${selectedMultiplier.multiplier} multiplier for 5 minutes!`);
-                addPlayerXP(selectedMultiplier.multiplier * 10);
-                updateGameUI();
-                updateQuestProgress('spins', 1);
-                
-                // Reset wheel after animation
-                setTimeout(() => {
-                    wheel.style.transition = 'none';
-                    wheel.style.transform = 'rotate(0deg)';
-                    setTimeout(() => {
-                        wheel.style.transition = 'transform 4s cubic-bezier(0.2, 0.8, 0.3, 1)';
-                    }, 50);
-                }, 1000);
-            }, 4000);
-        }
-        
-        // ============== PLAYER PROGRESSION ==============
-        function addPlayerXP(amount) {
-            gameData.playerXP += amount;
-            
-            // Level up check
-            while (gameData.playerXP >= gameData.playerXPNeeded) {
-                gameData.playerXP -= gameData.playerXPNeeded;
-                gameData.playerLevel++;
-                gameData.playerXPNeeded = Math.floor(gameData.playerXPNeeded * 1.5);
-                
-                showNotification(`Level Up! You are now level ${gameData.playerLevel}!`);
-                playSound('levelup');
-                
-                // Level up rewards
-                gameData.gems += Math.floor(gameData.playerLevel / 2);
-                gameData.coins += gameData.playerLevel * 100;
-            }
-            
-            updateGameUI();
-        }
-        
-        function checkAchievements() {
-            achievementsData.forEach(achievement => {
-                if (!gameData.achievements[achievement.id]) {
-                    if (achievement.condition(gameData)) {
-                        unlockAchievement(achievement);
-                    }
-                }
-            });
-        }
-        
-        function unlockAchievement(achievement) {
-            gameData.achievements[achievement.id] = {
-                unlocked: true,
-                unlockedAt: new Date().toISOString()
-            };
-            
-            // Apply rewards
-            if (achievement.reward.coins) {
-                gameData.coins += achievement.reward.coins;
-            }
-            if (achievement.reward.gems) {
-                gameData.gems += achievement.reward.gems;
-            }
-            if (achievement.reward.exmo) {
-                gameData.exmo += achievement.reward.exmo;
-            }
-            
-            showNotification(`Achievement Unlocked: ${achievement.name}!`);
-            playSound('achievement');
-            updateAchievementsDisplay();
-        }
-        
-        function updateQuestProgress(type, amount) {
-            gameData.activeQuests.forEach(quest => {
-                if (quest.type === type) {
-                    quest.progress += amount;
-                    if (quest.progress >= quest.goal && !quest.completed) {
-                        quest.completed = true;
-                        quest.completedAt = new Date().toISOString();
-                        showNotification(`Quest Complete: ${quest.name}!`);
-                    }
-                }
-            });
-            updateQuestsDisplay();
-        }
-        
-        function claimAllQuestRewards() {
-            let totalCoins = 0;
-            let totalExmo = 0;
-            let totalGems = 0;
-            
-            gameData.activeQuests.forEach(quest => {
-                if (quest.completed && !quest.rewardClaimed) {
-                    quest.rewardClaimed = true;
-                    
-                    if (quest.reward.coins) {
-                        totalCoins += quest.reward.coins;
-                    }
-                    if (quest.reward.exmo) {
-                        totalExmo += quest.reward.exmo;
-                    }
-                    if (quest.reward.gems) {
-                        totalGems += quest.reward.gems;
-                    }
-                    
-                    // Move to completed quests
-                    gameData.completedQuests.push(quest);
-                }
-            });
-            
-            // Remove completed quests from active
-            gameData.activeQuests = gameData.activeQuests.filter(q => !q.rewardClaimed);
-            
-            // Add new quests if needed
-            if (gameData.activeQuests.length < 3) {
-                const availableQuests = questsData.filter(q => 
-                    !gameData.activeQuests.some(aq => aq.id === q.id) &&
-                    !gameData.completedQuests.some(cq => cq.id === q.id)
-                );
-                
-                if (availableQuests.length > 0) {
-                    const newQuest = { ...availableQuests[0], progress: 0 };
-                    gameData.activeQuests.push(newQuest);
-                }
-            }
-            
-            // Apply rewards
-            if (totalCoins > 0) {
-                gameData.coins += totalCoins;
-            }
-            if (totalExmo > 0) {
-                gameData.exmo += totalExmo;
-            }
-            if (totalGems > 0) {
-                gameData.gems += totalGems;
-            }
-            
-            gameData.daily.questsCompletedToday += 
-                (totalCoins > 0 ? 1 : 0) + (totalExmo > 0 ? 1 : 0) + (totalGems > 0 ? 1 : 0);
-            
-            if (totalCoins + totalExmo + totalGems > 0) {
-                showNotification(`Claimed ${totalCoins} coins, ${totalExmo} Exmo, ${totalGems} gems from quests!`);
-                addPlayerXP((totalCoins + totalExmo * 100 + totalGems * 1000) / 10);
-            }
-            
-            updateGameUI();
-            updateQuestsDisplay();
-        }
-        
-        // ============== UI UPDATES ==============
-        function updateGameUI() {
-            // Update stats
-            document.getElementById('coinsValue').textContent = formatNumber(gameData.coins);
-            document.getElementById('exmoValue').textContent = formatNumber(gameData.exmo);
-            document.getElementById('gemsValue').textContent = formatNumber(gameData.gems);
-            document.getElementById('clickPowerValue').textContent = formatNumber(gameData.clickPower);
-            document.getElementById('clickAmount').textContent = formatNumber(gameData.clickPower);
-            document.getElementById('playerLevel').textContent = gameData.playerLevel;
-            
-            // Update upgrade info
-            document.getElementById('clickLevel').textContent = gameData.clickLevel;
-            document.getElementById('clickCost').textContent = formatNumber(calculateClickUpgradeCost());
-            document.getElementById('backpackSlots').textContent = gameData.backpackSlots;
-            document.getElementById('backpackCost').textContent = formatNumber(calculateBackpackUpgradeCost());
-            document.getElementById('autoClickerSpeed').textContent = gameData.autoClickerSpeed;
-            document.getElementById('autoClickerCost').textContent = formatNumber(calculateAutoClickerCost());
-            
-            // Update backpack info
-            document.getElementById('currentSlots').textContent = gameData.pets.length;
-            document.getElementById('maxSlots').textContent = gameData.backpackSlots;
-            
-            // Update wheel spins
-            document.getElementById('spinsToday').textContent = gameData.daily.spinsToday;
-            
-            // Calculate total pet bonus
-            let totalPetBonus = 0;
-            gameData.pets.forEach(pet => {
-                const petData = petsData[pet.type];
-                if (petData) {
-                    totalPetBonus += petData.basePower * pet.level;
-                }
-            });
-            document.getElementById('totalPetBonus').textContent = totalPetBonus;
-            
-            // Update XP bar
-            const xpPercent = (gameData.playerXP / gameData.playerXPNeeded) * 100;
-            
-            // Update button states
-            document.getElementById('upgradeClickBtn').disabled = gameData.coins < calculateClickUpgradeCost();
-            document.getElementById('upgradeBackpackBtn').disabled = gameData.coins < calculateBackpackUpgradeCost();
-            document.getElementById('upgradeAutoClickerBtn').disabled = gameData.gems < calculateAutoClickerCost();
-            document.getElementById('convertCoinsBtn').disabled = gameData.coins < 100;
-            document.getElementById('convertExmoBtn').disabled = gameData.exmo < 10;
-            document.getElementById('spinBtn').disabled = gameData.exmo < 1 || gameData.daily.spinsToday >= 10;
-            document.getElementById('refreshShopBtn').disabled = gameData.gems < 10;
-        }
-        
-        function formatNumber(num) {
-            if (num >= 1000000000) {
-                return (num / 1000000000).toFixed(1) + 'B';
-            }
-            if (num >= 1000000) {
-                return (num / 1000000).toFixed(1) + 'M';
-            }
-            if (num >= 1000) {
-                return (num / 1000).toFixed(1) + 'K';
-            }
-            return Math.floor(num);
-        }
-        
-        function initializeBackpack() {
-            const container = document.getElementById('backpackSlotsContainer');
-            if (!container) return;
-            
-            container.innerHTML = '';
-            
-            for (let i = 0; i < gameData.backpackSlots; i++) {
-                const slot = document.createElement('div');
-                slot.className = 'slot';
-                
-                if (i < gameData.pets.length) {
-                    slot.classList.add('filled');
-                    const pet = gameData.pets[i];
-                    if (petsData[pet.type]) {
-                        slot.textContent = petsData[pet.type].icon;
-                        slot.style.borderColor = petsData[pet.type].color;
-                    }
-                }
-                
-                container.appendChild(slot);
-            }
-        }
-        
-        function initializeShop() {
-            const container = document.querySelector('.shop-items');
-            if (!container) return;
-            
-            container.innerHTML = '';
-            
-            // Get random pets for shop (3-5 pets)
-            const availablePets = Object.keys(petsData);
-            const shopPets = [];
-            const numPets = Math.floor(Math.random() * 3) + 3; // 3-5 pets
-            
-            for (let i = 0; i < numPets; i++) {
-                const randomPet = availablePets[Math.floor(Math.random() * availablePets.length)];
-                if (!shopPets.includes(randomPet)) {
-                    shopPets.push(randomPet);
-                }
-            }
-            
-            shopPets.forEach(petType => {
-                const petData = petsData[petType];
-                const item = document.createElement('div');
-                item.className = 'shop-item';
-                item.setAttribute('data-pet', petType);
-                item.setAttribute('data-price', petData.price);
-                item.style.borderColor = petData.color;
-                
-                item.innerHTML = `
-                    <div class="shop-item-icon">${petData.icon}</div>
-                    <div>${petData.name}</div>
-                    <div style="font-size: 0.8rem; color: ${petData.color}; margin: 3px 0;">${petData.rarity}</div>
-                    <div class="shop-item-price">${petData.price} Gems</div>
-                `;
-                
-                item.addEventListener('click', () => buyPet(petType, petData.price));
-                container.appendChild(item);
-            });
-        }
-        
-        function refreshShop() {
-            if (gameData.gems >= 10) {
-                gameData.gems -= 10;
-                initializeShop();
-                updateGameUI();
-                showNotification('Shop refreshed!');
-            } else {
-                showNotification('Need 10 gems to refresh shop');
-            }
-        }
-        
-        function updatePetsDisplay() {
-            const container = document.getElementById('petsContainer');
-            if (!container) return;
-            
-            container.innerHTML = '';
-            
-            gameData.pets.forEach((pet, index) => {
-                const petData = petsData[pet.type];
-                if (!petData) return;
-                
-                const petElement = document.createElement('div');
-                petElement.className = 'pet-item';
-                petElement.style.borderColor = petData.color;
-                petElement.innerHTML = `
-                    <div class="pet-icon">${petData.icon}</div>
-                    <div>${petData.name} Lv.${pet.level}</div>
-                    <div class="pet-level">${index + 1}</div>
-                `;
-                
-                container.appendChild(petElement);
-            });
-        }
-        
-        function initializeAchievements() {
-            const container = document.getElementById('achievementsGrid');
-            if (!container) return;
-            
-            container.innerHTML = '';
-            
-            let unlockedCount = 0;
-            
-            achievementsData.forEach(achievement => {
-                const unlocked = gameData.achievements[achievement.id]?.unlocked || false;
-                if (unlocked) unlockedCount++;
-                
-                const achievementElement = document.createElement('div');
-                achievementElement.className = `achievement ${unlocked ? '' : 'locked'}`;
-                achievementElement.innerHTML = `
-                    <div class="achievement-icon">${achievement.icon}</div>
-                    <div style="font-weight: bold;">${achievement.name}</div>
-                    <div style="font-size: 0.8rem; margin-top: 5px;">${achievement.description}</div>
-                    <div class="achievement-reward">
-                        Reward: ${achievement.reward.coins ? achievement.reward.coins + ' coins' : ''}
-                        ${achievement.reward.gems ? achievement.reward.gems + ' gems' : ''}
-                        ${achievement.reward.exmo ? achievement.reward.exmo + ' exmo' : ''}
-                    </div>
-                `;
-                
-                container.appendChild(achievementElement);
-            });
-            
-            document.getElementById('achievementsProgress').textContent = `${unlockedCount}/${achievementsData.length}`;
-        }
-        
-        function updateAchievementsDisplay() {
-            const container = document.getElementById('achievementsGrid');
-            if (!container) return;
-            
-            let unlockedCount = 0;
-            const children = container.children;
-            
-            for (let i = 0; i < children.length; i++) {
-                const achievement = achievementsData[i];
-                if (achievement) {
-                    const unlocked = gameData.achievements[achievement.id]?.unlocked || false;
-                    if (unlocked) unlockedCount++;
-                    
-                    if (unlocked) {
-                        children[i].classList.remove('locked');
-                    }
-                }
-            }
-            
-            document.getElementById('achievementsProgress').textContent = `${unlockedCount}/${achievementsData.length}`;
-        }
-        
-        function initializeQuests() {
-            const container = document.getElementById('questsContainer');
-            if (!container) return;
-            
-            container.innerHTML = '';
-            
-            gameData.activeQuests.forEach(quest => {
-                const questElement = document.createElement('div');
-                questElement.className = 'quest-item';
-                const progressPercent = Math.min((quest.progress / quest.goal) * 100, 100);
-                
-                questElement.innerHTML = `
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                        <div style="font-size: 1.5rem;">${quest.icon}</div>
-                        <div>
-                            <div style="font-weight: bold; color: var(--gold);">${quest.name}</div>
-                            <div style="font-size: 0.9rem;">${quest.description}</div>
-                        </div>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
-                        <span>Progress: ${Math.min(quest.progress, quest.goal)}/${quest.goal}</span>
-                        <span style="color: var(--gold);">
-                            Reward: ${quest.reward.coins ? quest.reward.coins + ' coins' : ''}
-                            ${quest.reward.exmo ? quest.reward.exmo + ' exmo' : ''}
-                            ${quest.reward.gems ? quest.reward.gems + ' gems' : ''}
-                        </span>
-                    </div>
-                    <div class="quest-progress">
-                        <div class="quest-progress-bar" style="width: ${progressPercent}%"></div>
-                    </div>
-                    ${quest.completed ? '<div style="text-align: center; margin-top: 10px; color: var(--success-green);"><i class="fas fa-check-circle"></i> Ready to Claim!</div>' : ''}
-                `;
-                
-                container.appendChild(questElement);
-            });
-        }
-        
-        function updateQuestsDisplay() {
-            initializeQuests();
-        }
-        
-        function initializeInventory() {
-            const container = document.getElementById('inventoryGrid');
-            if (!container) return;
-            
-            container.innerHTML = '';
-            
-            let totalItems = 0;
-            Object.keys(inventoryItems).forEach(itemKey => {
-                const item = inventoryItems[itemKey];
-                const count = gameData.inventory[itemKey] || 0;
-                totalItems += count;
-                
-                if (count > 0) {
-                    const itemElement = document.createElement('div');
-                    itemElement.className = 'inventory-item';
-                    itemElement.title = `${item.name}\n${item.description}\nQuantity: ${count}`;
-                    itemElement.innerHTML = `
-                        ${item.icon}
-                        ${count > 1 ? `<div class="item-count">${count}</div>` : ''}
-                    `;
-                    
-                    container.appendChild(itemElement);
-                }
-            });
-            
-            document.getElementById('totalItems').textContent = totalItems;
-        }
-        
-        // ============== CHAT SYSTEM ==============
-        async function sendChatMessage() {
-            if (!currentUser) {
-                showNotification('Please login to chat');
-                return;
-            }
-            
-            const input = document.getElementById('chatInput');
-            const message = input.value.trim();
-            
-            if (!message) {
-                showNotification('Message cannot be empty');
-                return;
-            }
-            
-            if (message.length > 200) {
-                showNotification('Message too long (max 200 characters)');
-                return;
-            }
-            
-            try {
-                // Save to Supabase
-                const { error } = await supabase
-                    .from('chat_messages')
-                    .insert([
-                        {
-                            user_id: currentUser.id,
-                            username: currentUser.username,
-                            message: message,
-                            timestamp: new Date().toISOString()
-                        }
-                    ]);
-                
-                if (error) throw error;
-                
-                // Add to local chat display
-                const chatMessages = document.getElementById('chatMessages');
-                const messageElement = document.createElement('div');
-                messageElement.className = 'chat-message';
-                messageElement.innerHTML = `
-                    <span class="user">${currentUser.username}:</span>
-                    <span style="color: var(--light-brown); font-size: 0.8em; margin-left: 5px;">
-                        ${new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
-                    </span>
-                    <div style="margin-top: 3px;">${message}</div>
-                `;
-                
-                chatMessages.appendChild(messageElement);
-                input.value = '';
-                
-                // Scroll to bottom
-                setTimeout(() => {
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                }, 100);
-                
-            } catch (error) {
-                console.error('Error sending chat message:', error);
-                showNotification('Error sending message');
-            }
-        }
-        
-        async function loadChatMessages() {
-            try {
-                const { data, error } = await supabase
-                    .from('chat_messages')
-                    .select('*')
-                    .order('timestamp', { ascending: false })
-                    .limit(50);
-                
-                if (error) throw error;
-                
-                const chatMessages = document.getElementById('chatMessages');
-                chatMessages.innerHTML = '';
-                
-                data.reverse().forEach(msg => {
-                    const messageElement = document.createElement('div');
-                    messageElement.className = 'chat-message';
-                    messageElement.innerHTML = `
-                        <span class="user">${msg.username}:</span>
-                        <span style="color: var(--light-brown); font-size: 0.8em; margin-left: 5px;">
-                            ${new Date(msg.timestamp).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
-                        </span>
-                        <div style="margin-top: 3px;">${msg.message}</div>
-                    `;
-                    
-                    chatMessages.appendChild(messageElement);
-                });
-                
-                // Scroll to bottom
-                setTimeout(() => {
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                }, 100);
-                
-            } catch (error) {
-                console.error('Error loading chat messages:', error);
-            }
-        }
-        
-        function clearChat() {
-            if (confirm('Clear all chat messages?')) {
-                document.getElementById('chatMessages').innerHTML = `
-                    <div class="chat-message">
-                        <span class="user">System:</span> Chat cleared.
-                    </div>
-                `;
-            }
-        }
-        
-        function showEmojiPicker() {
-            document.getElementById('emojiPickerModal').classList.remove('hidden');
-        }
-        
-        function hideEmojiPicker() {
-            document.getElementById('emojiPickerModal').classList.add('hidden');
-        }
-        
-        function insertEmoji(emoji) {
-            const input = document.getElementById('chatInput');
-            input.value += emoji;
-            input.focus();
-            hideEmojiPicker();
-        }
-        
-        // ============== LEADERBOARD ==============
-        async function loadLeaderboard() {
-            try {
-                const { data, error } = await supabase
-                    .from('users')
-                    .select('username, game_data')
-                    .order('game_data->>coins', { ascending: false })
-                    .limit(20);
-                
-                if (error) throw error;
-                
-                const leaderboardData = data.map(user => {
-                    let coins = 0;
-                    let gems = 0;
-                    try {
-                        const gameData = JSON.parse(user.game_data);
-                        coins = gameData.coins || 0;
-                        gems = gameData.gems || 0;
-                    } catch (e) {
-                        console.error('Error parsing user game data:', e);
-                    }
-                    
-                    return {
-                        username: user.username,
-                        coins: coins,
-                        gems: gems
-                    };
-                });
-                
-                updateLeaderboardUI(leaderboardData, 'menuLeaderboard');
-                updateLeaderboardUI(leaderboardData, 'gameLeaderboard');
-                
-            } catch (error) {
-                console.error('Error loading leaderboard:', error);
-                // Fallback to mock data
-                const mockLeaderboard = [
-                    { username: 'KingArthur', coins: 1250000, gems: 450 },
-                    { username: 'QueenEliza', coins: 980000, gems: 320 },
-                    { username: 'SirLancelot', coins: 750000, gems: 280 },
-                    { username: 'WizardMerlin', coins: 620000, gems: 210 },
-                    { username: 'DragonSlayer', coins: 450000, gems: 180 }
-                ];
-                
-                updateLeaderboardUI(mockLeaderboard, 'menuLeaderboard');
-                updateLeaderboardUI(mockLeaderboard, 'gameLeaderboard');
-            }
-        }
-        
-        function updateLeaderboardUI(data, elementId) {
-            const container = document.getElementById(elementId);
-            if (!container) return;
-            
-            container.innerHTML = '';
-            
-            data.forEach((player, index) => {
-                const row = document.createElement('tr');
-                
-                let rankColor = 'var(--light-brown)';
-                if (index === 0) rankColor = 'var(--gold)';
-                else if (index === 1) rankColor = 'var(--silver)';
-                else if (index === 2) rankColor = '#CD7F32';
-                
-                row.innerHTML = `
-                    <td>
-                        <span class="rank-badge" style="background: ${rankColor}">${index + 1}</span>
-                    </td>
-                    <td>
-                        ${player.username}
-                        ${currentUser && player.username === currentUser.username ? 
-                          '<span style="color: var(--gold); font-size: 0.8em;"> (You)</span>' : ''}
-                    </td>
-                    <td>${formatNumber(player.coins)}</td>
-                    <td>${player.gems || 0}</td>
-                `;
-                
-                container.appendChild(row);
-            });
-        }
-        
-        // ============== GAME SAVE/LOAD ==============
-        async function saveGameToSupabase() {
-            if (!currentUser) return;
-            
-            try {
-                const { error } = await supabase
-                    .from('user_game_data')
-                    .upsert([
-                        {
-                            user_id: currentUser.id,
-                            game_data: JSON.stringify(gameData),
-                            last_updated: new Date().toISOString()
-                        }
-                    ]);
-                
-                if (error) throw error;
-                
-                // Also save to localStorage as backup
-                localStorage.setItem('clickerGameData', JSON.stringify(gameData));
-                
-                showNotification('Game saved successfully!');
-                
-            } catch (error) {
-                console.error('Error saving game:', error);
-                showNotification('Error saving game');
-            }
-        }
-        
-        async function loadGameFromSupabase() {
-            if (!currentUser) {
-                showNotification('Please login to load game');
-                return;
-            }
-            
-            try {
-                const { data, error } = await supabase
-                    .from('user_game_data')
-                    .select('*')
-                    .eq('user_id', currentUser.id)
-                    .single();
-                
-                if (error) throw error;
-                
-                if (data) {
-                    gameData = JSON.parse(data.game_data);
-                    updateGameUI();
-                    initializeBackpack();
-                    updatePetsDisplay();
-                    initializeAchievements();
-                    initializeQuests();
-                    initializeInventory();
-                    showNotification('Game loaded successfully!');
-                }
-                
-            } catch (error) {
-                console.error('Error loading game:', error);
-                showNotification('Error loading game');
-            }
-        }
-        
-        function loadGameData() {
-            const savedData = localStorage.getItem('clickerGameData');
-            if (savedData) {
-                try {
-                    const parsed = JSON.parse(savedData);
-                    // Merge with current game data
-                    gameData = { ...gameData, ...parsed };
-                } catch (e) {
-                    console.error('Error loading saved game data:', e);
-                }
-            }
-        }
-        
-        function autoSaveGame() {
-            if (currentUser && gameData.settings.autosave) {
-                saveGameToSupabase();
-            }
-        }
-        
-        // ============== UTILITY FUNCTIONS ==============
         function showClickEffect(amount) {
             const clickButton = document.getElementById('clickButton');
             const effect = document.createElement('div');
@@ -3192,13 +1746,926 @@
             }, 1100);
         }
         
+        function convertCoinsToExmo() {
+            if (!currentUser) {
+                showNotification('Please login to convert coins');
+                return;
+            }
+            
+            if (gameData.coins >= 100) {
+                gameData.coins -= 100;
+                gameData.exmo += 1;
+                gameData.stats.totalExmo += 1;
+                updateGameUI();
+                showNotification('Converted 100 coins to 1 Exmo!');
+                saveGameData();
+            } else {
+                showNotification('Need at least 100 coins to convert');
+            }
+        }
+        
+        function convertExmoToGems() {
+            if (!currentUser) {
+                showNotification('Please login to convert Exmo');
+                return;
+            }
+            
+            if (gameData.exmo >= 10) {
+                gameData.exmo -= 10;
+                gameData.gems += 1;
+                gameData.stats.totalGems += 1;
+                updateGameUI();
+                showNotification('Converted 10 Exmo to 1 Gem!');
+                saveGameData();
+            } else {
+                showNotification('Need at least 10 Exmo to convert');
+            }
+        }
+        
+        function upgradeClick() {
+            const cost = calculateClickUpgradeCost();
+            
+            if (gameData.coins >= cost) {
+                gameData.coins -= cost;
+                gameData.clickLevel++;
+                gameData.clickPower *= 2;
+                
+                updateGameUI();
+                showNotification(`Click power upgraded to level ${gameData.clickLevel}!`);
+                saveGameData();
+                checkAchievements();
+            } else {
+                showNotification(`Need ${cost} coins to upgrade`);
+            }
+        }
+        
+        function calculateClickUpgradeCost() {
+            return 100 * Math.pow(2, gameData.clickLevel - 1);
+        }
+        
+        function upgradeBackpack() {
+            const cost = calculateBackpackUpgradeCost();
+            
+            if (gameData.coins >= cost) {
+                gameData.coins -= cost;
+                gameData.backpackLevel++;
+                gameData.backpackSlots = 4 * Math.pow(2, gameData.backpackLevel - 1);
+                
+                updateGameUI();
+                initBackpack();
+                showNotification(`Backpack upgraded to ${gameData.backpackSlots} slots!`);
+                saveGameData();
+                checkAchievements();
+            } else {
+                showNotification(`Need ${cost} coins to upgrade backpack`);
+            }
+        }
+        
+        function calculateBackpackUpgradeCost() {
+            return 10000 * Math.pow(2, gameData.backpackLevel - 1);
+        }
+        
+        function upgradeAutoClicker() {
+            const cost = calculateAutoClickerCost();
+            
+            if (gameData.gems >= cost) {
+                gameData.gems -= cost;
+                gameData.autoClickerLevel++;
+                gameData.autoClickerSpeed = gameData.autoClickerLevel;
+                
+                // Start auto-clicker
+                if (!gameData.autoClickerActive) {
+                    startAutoClicker();
+                    gameData.autoClickerActive = true;
+                }
+                
+                updateGameUI();
+                showNotification(`Auto-clicker upgraded to level ${gameData.autoClickerLevel}!`);
+                saveGameData();
+            } else {
+                showNotification(`Need ${cost} gems to upgrade auto-clicker`);
+            }
+        }
+        
+        function calculateAutoClickerCost() {
+            return 50 * Math.pow(2, gameData.autoClickerLevel);
+        }
+        
+        function startAutoClicker() {
+            if (gameData.autoClickerSpeed > 0) {
+                setInterval(() => {
+                    if (gameData.autoClickerActive) {
+                        handleClick();
+                    }
+                }, 1000 / gameData.autoClickerSpeed);
+            }
+        }
+        
+        function buyPet(petId) {
+            const petData = petsData.find(p => p.id === petId);
+            
+            if (!petData) {
+                showNotification('Pet not found!');
+                return;
+            }
+            
+            if (!currentUser) {
+                showNotification('Please login to buy pets');
+                return;
+            }
+            
+            if (gameData.gems < petData.price) {
+                showNotification(`Need ${petData.price} gems to buy ${petData.name}`);
+                return;
+            }
+            
+            if (gameData.pets.length >= gameData.backpackSlots) {
+                showNotification('Backpack is full! Upgrade your backpack first.');
+                return;
+            }
+            
+            // Check if pet already exists
+            const existingPet = gameData.pets.find(p => p.type === petId);
+            if (existingPet) {
+                existingPet.level++;
+                showNotification(`${petData.name} leveled up to level ${existingPet.level}!`);
+            } else {
+                gameData.pets.push({
+                    type: petId,
+                    level: 1,
+                    acquired: new Date().toISOString()
+                });
+                showNotification(`You bought a ${petData.name}!`);
+            }
+            
+            gameData.gems -= petData.price;
+            
+            updateGameUI();
+            loadShopItems();
+            updatePetsDisplay();
+            initBackpack();
+            checkAchievements();
+            saveGameData();
+        }
+        
+        function spinWheel() {
+            if (!currentUser) {
+                showNotification('Please login to spin the wheel');
+                return;
+            }
+            
+            // Check daily limit
+            const today = new Date().toDateString();
+            if (gameData.daily.lastSpin === today && gameData.daily.spins >= 10) {
+                showNotification('Daily spin limit reached! Come back tomorrow.');
+                return;
+            }
+            
+            if (gameData.exmo < 1) {
+                showNotification('Need 1 Exmo to spin the wheel');
+                return;
+            }
+            
+            // Reset daily spins if it's a new day
+            if (gameData.daily.lastSpin !== today) {
+                gameData.daily.spins = 0;
+                gameData.daily.lastSpin = today;
+            }
+            
+            gameData.exmo -= 1;
+            gameData.daily.spins++;
+            
+            // Calculate total probability
+            const totalProbability = wheelMultipliers.reduce((sum, item) => sum + item.probability, 0);
+            
+            // Generate random number
+            let random = Math.random() * totalProbability;
+            let selectedMultiplier = wheelMultipliers[0];
+            
+            // Select multiplier based on probability
+            for (const item of wheelMultipliers) {
+                if (random <= item.probability) {
+                    selectedMultiplier = item;
+                    break;
+                }
+                random -= item.probability;
+            }
+            
+            // Apply multiplier to coins
+            const bonus = Math.floor(gameData.coins * (selectedMultiplier.multiplier - 1));
+            gameData.coins += bonus;
+            
+            // Animate wheel
+            const wheel = document.getElementById('wheel');
+            const spins = 5 + Math.random() * 3;
+            const degrees = spins * 360 + (selectedMultiplier.multiplier * 10);
+            
+            wheel.style.transition = 'transform 4s cubic-bezier(0.2, 0.8, 0.3, 1)';
+            wheel.style.transform = `rotate(${degrees}deg)`;
+            
+            // Show result
+            setTimeout(() => {
+                showNotification(`Wheel result: x${selectedMultiplier.multiplier}! You won ${bonus} coins!`);
+                updateGameUI();
+                saveGameData();
+                checkAchievements();
+                
+                // Reset wheel after animation
+                setTimeout(() => {
+                    wheel.style.transition = 'none';
+                    wheel.style.transform = 'rotate(0deg)';
+                    setTimeout(() => {
+                        wheel.style.transition = 'transform 4s cubic-bezier(0.2, 0.8, 0.3, 1)';
+                    }, 50);
+                }, 1000);
+            }, 4000);
+        }
+        
+        function refreshShop() {
+            if (gameData.gems >= 10) {
+                gameData.gems -= 10;
+                loadShopItems();
+                updateGameUI();
+                showNotification('Shop refreshed!');
+                saveGameData();
+            } else {
+                showNotification('Need 10 gems to refresh shop');
+            }
+        }
+
+        // ============== UI UPDATES ==============
+        function updateGameUI() {
+            // Update stats
+            document.getElementById('coinsValue').textContent = formatNumber(gameData.coins);
+            document.getElementById('exmoValue').textContent = formatNumber(gameData.exmo);
+            document.getElementById('gemsValue').textContent = formatNumber(gameData.gems);
+            document.getElementById('clickPowerValue').textContent = formatNumber(gameData.clickPower);
+            document.getElementById('clickAmount').textContent = formatNumber(gameData.clickPower);
+            
+            // Update upgrade info
+            document.getElementById('clickLevel').textContent = gameData.clickLevel;
+            document.getElementById('clickCost').textContent = formatNumber(calculateClickUpgradeCost());
+            document.getElementById('backpackSlots').textContent = gameData.backpackSlots;
+            document.getElementById('backpackCost').textContent = formatNumber(calculateBackpackUpgradeCost());
+            document.getElementById('autoClickerLevel').textContent = gameData.autoClickerLevel;
+            document.getElementById('autoClickerCost').textContent = formatNumber(calculateAutoClickerCost());
+            
+            // Update backpack info
+            document.getElementById('currentSlots').textContent = gameData.pets.length;
+            document.getElementById('maxSlots').textContent = gameData.backpackSlots;
+            
+            // Update wheel spins
+            const today = new Date().toDateString();
+            if (gameData.daily.lastSpin === today) {
+                document.getElementById('spinsToday').textContent = gameData.daily.spins;
+            } else {
+                document.getElementById('spinsToday').textContent = '0';
+            }
+            
+            // Calculate total pet bonus
+            let totalPetBonus = 0;
+            gameData.pets.forEach(pet => {
+                const petData = petsData.find(p => p.id === pet.type);
+                if (petData) {
+                    totalPetBonus += petData.power * pet.level;
+                }
+            });
+            document.getElementById('totalPetBonus').textContent = totalPetBonus;
+            
+            // Update button states
+            document.getElementById('convertCoinsBtn').disabled = gameData.coins < 100;
+            document.getElementById('convertExmoBtn').disabled = gameData.exmo < 10;
+            document.getElementById('upgradeClickBtn').disabled = gameData.coins < calculateClickUpgradeCost();
+            document.getElementById('upgradeBackpackBtn').disabled = gameData.coins < calculateBackpackUpgradeCost();
+            document.getElementById('upgradeAutoClickerBtn').disabled = gameData.gems < calculateAutoClickerCost();
+            document.getElementById('spinBtn').disabled = gameData.exmo < 1;
+        }
+        
+        function formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            }
+            if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+        
+        function initBackpack() {
+            const container = document.getElementById('backpackSlotsContainer');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            for (let i = 0; i < gameData.backpackSlots; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'slot';
+                
+                if (i < gameData.pets.length) {
+                    slot.classList.add('filled');
+                    const pet = gameData.pets[i];
+                    const petData = petsData.find(p => p.id === pet.type);
+                    if (petData) {
+                        slot.textContent = petData.icon;
+                        slot.style.borderColor = petData.color;
+                    }
+                }
+                
+                container.appendChild(slot);
+            }
+        }
+        
+        function loadShopItems() {
+            const container = document.getElementById('shopItems');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            // Get random pets for shop
+            const shuffledPets = [...petsData].sort(() => 0.5 - Math.random());
+            const shopPets = shuffledPets.slice(0, 6); // Show 6 random pets
+            
+            shopPets.forEach(pet => {
+                const item = document.createElement('div');
+                item.className = 'shop-item';
+                item.style.borderColor = pet.color;
+                item.onclick = () => buyPet(pet.id);
+                
+                // Check if player can afford
+                const canAfford = gameData.gems >= pet.price;
+                item.style.opacity = canAfford ? '1' : '0.6';
+                
+                item.innerHTML = `
+                    <div class="shop-item-icon">${pet.icon}</div>
+                    <div>${pet.name}</div>
+                    <div style="font-size: 0.8rem; color: ${pet.color}; margin: 3px 0;">${pet.rarity}</div>
+                    <div class="shop-item-price">${pet.price} Gems</div>
+                    ${!canAfford ? '<div style="font-size: 0.7rem; color: var(--light-brown);">Need more gems</div>' : ''}
+                `;
+                
+                container.appendChild(item);
+            });
+        }
+        
+        function updatePetsDisplay() {
+            const container = document.getElementById('petsContainer');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            gameData.pets.forEach((pet, index) => {
+                const petData = petsData.find(p => p.id === pet.type);
+                if (!petData) return;
+                
+                const petElement = document.createElement('div');
+                petElement.className = 'pet-item';
+                petElement.style.borderColor = petData.color;
+                petElement.innerHTML = `
+                    <div class="pet-icon">${petData.icon}</div>
+                    <div>${petData.name}</div>
+                    <div style="font-size: 0.8rem;">Level ${pet.level}</div>
+                    <div class="pet-level">${index + 1}</div>
+                `;
+                
+                container.appendChild(petElement);
+            });
+        }
+        
+        function loadAchievements() {
+            const container = document.getElementById('achievementsGrid');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            achievementsData.forEach(achievement => {
+                const unlocked = gameData.achievements.includes(achievement.id);
+                const card = document.createElement('div');
+                card.className = `achievement-card ${unlocked ? '' : 'locked'}`;
+                
+                card.innerHTML = `
+                    <div class="achievement-icon">${achievement.icon}</div>
+                    <div class="achievement-info">
+                        <h3>${achievement.name}</h3>
+                        <div class="achievement-description">${achievement.description}</div>
+                        <div class="achievement-reward">
+                            Reward: 
+                            ${achievement.reward.coins ? `${achievement.reward.coins} coins` : ''}
+                            ${achievement.reward.gems ? `${achievement.reward.gems} gems` : ''}
+                            ${achievement.reward.exmo ? `${achievement.reward.exmo} exmo` : ''}
+                        </div>
+                        ${unlocked ? '<div style="color: var(--success-green); margin-top: 5px;"><i class="fas fa-check"></i> Unlocked</div>' : ''}
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+        
+        function checkAchievements() {
+            let newAchievements = [];
+            
+            // Check each achievement
+            if (gameData.stats.totalClicks >= 1 && !gameData.achievements.includes('first_click')) {
+                newAchievements.push('first_click');
+                gameData.coins += 100;
+            }
+            
+            if (gameData.stats.totalCoins >= 1000 && !gameData.achievements.includes('coin_collector')) {
+                newAchievements.push('coin_collector');
+                gameData.gems += 1;
+            }
+            
+            if (gameData.pets.length >= 3 && !gameData.achievements.includes('pet_lover')) {
+                newAchievements.push('pet_lover');
+                gameData.coins += 500;
+            }
+            
+            if (gameData.clickPower >= 10 && !gameData.achievements.includes('click_master')) {
+                newAchievements.push('click_master');
+                gameData.gems += 5;
+            }
+            
+            if (gameData.coins >= 10000 && !gameData.achievements.includes('rich_king')) {
+                newAchievements.push('rich_king');
+                gameData.gems += 10;
+            }
+            
+            if (gameData.daily.spins >= 10 && !gameData.achievements.includes('gambler')) {
+                newAchievements.push('gambler');
+                gameData.exmo += 5;
+            }
+            
+            if (gameData.backpackSlots >= 16 && !gameData.achievements.includes('backpacker')) {
+                newAchievements.push('backpacker');
+                gameData.coins += 1000;
+            }
+            
+            if (gameData.pets.length >= 10 && !gameData.achievements.includes('pet_hoarder')) {
+                newAchievements.push('pet_hoarder');
+                gameData.gems += 20;
+            }
+            
+            if (gameData.gems >= 100 && !gameData.achievements.includes('gem_king')) {
+                newAchievements.push('gem_king');
+                gameData.coins += 5000;
+            }
+            
+            // Add new achievements
+            newAchievements.forEach(achievementId => {
+                if (!gameData.achievements.includes(achievementId)) {
+                    gameData.achievements.push(achievementId);
+                    const achievement = achievementsData.find(a => a.id === achievementId);
+                    if (achievement) {
+                        showNotification(`Achievement Unlocked: ${achievement.name}!`);
+                    }
+                }
+            });
+            
+            // Check legendary ruler achievement
+            if (gameData.achievements.length === achievementsData.length && !gameData.achievements.includes('legendary_ruler')) {
+                gameData.achievements.push('legendary_ruler');
+                gameData.gems += 50;
+                gameData.coins += 10000;
+                showNotification('Legendary Achievement Unlocked: Legendary Ruler!');
+            }
+            
+            // Update achievements display if on achievements page
+            if (document.getElementById('achievementsPage').classList.contains('active')) {
+                loadAchievements();
+            }
+            
+            // Update game UI
+            updateGameUI();
+        }
+
+        // ============== LEADERBOARD ==============
+        async function loadLeaderboard() {
+            try {
+                const { data: users, error } = await supabase
+                    .from('users')
+                    .select('username, game_data')
+                    .order('game_data->coins', { ascending: false })
+                    .limit(20);
+                
+                if (error) throw error;
+                
+                const leaderboardData = users.map((user, index) => {
+                    let coins = 0;
+                    let gems = 0;
+                    let level = 1;
+                    
+                    try {
+                        const gameData = JSON.parse(user.game_data);
+                        coins = gameData.coins || 0;
+                        gems = gameData.gems || 0;
+                        level = gameData.clickLevel || 1;
+                    } catch (e) {
+                        console.error('Error parsing game data:', e);
+                    }
+                    
+                    return {
+                        rank: index + 1,
+                        username: user.username,
+                        coins: coins,
+                        gems: gems,
+                        level: level
+                    };
+                });
+                
+                updateLeaderboardUI(leaderboardData);
+                
+            } catch (error) {
+                console.error('Error loading leaderboard:', error);
+                // Fallback to mock data
+                const mockLeaderboard = [
+                    { rank: 1, username: 'KingArthur', coins: 1250000, gems: 450, level: 15 },
+                    { rank: 2, username: 'QueenEliza', coins: 980000, gems: 320, level: 12 },
+                    { rank: 3, username: 'SirLancelot', coins: 750000, gems: 280, level: 11 },
+                    { rank: 4, username: 'WizardMerlin', coins: 620000, gems: 210, level: 10 },
+                    { rank: 5, username: 'DragonSlayer', coins: 450000, gems: 180, level: 9 }
+                ];
+                
+                updateLeaderboardUI(mockLeaderboard);
+            }
+        }
+        
+        function refreshLeaderboard() {
+            loadLeaderboard();
+            showNotification('Leaderboard refreshed!');
+        }
+        
+        function updateLeaderboardUI(data) {
+            const container = document.getElementById('leaderboardData');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            data.forEach(player => {
+                const row = document.createElement('tr');
+                
+                let rankColor = 'var(--light-brown)';
+                if (player.rank === 1) rankColor = 'var(--gold)';
+                else if (player.rank === 2) rankColor = 'var(--silver)';
+                else if (player.rank === 3) rankColor = '#CD7F32';
+                
+                row.innerHTML = `
+                    <td>
+                        <span class="rank-badge" style="background: ${rankColor}">${player.rank}</span>
+                    </td>
+                    <td>
+                        ${player.username}
+                        ${currentUser && player.username === currentUser.username ? 
+                          '<span style="color: var(--gold); font-size: 0.8em;"> (You)</span>' : ''}
+                    </td>
+                    <td>${formatNumber(player.coins)}</td>
+                    <td>${player.gems}</td>
+                    <td>${player.level}</td>
+                `;
+                
+                container.appendChild(row);
+            });
+        }
+
+        // ============== AUTH SYSTEM ==============
+        async function checkAuthStatus() {
+            const { data, error } = await supabase.auth.getSession();
+            
+            if (data.session) {
+                const user = data.session.user;
+                currentUser = {
+                    id: user.id,
+                    username: user.user_metadata?.username || user.email?.split('@')[0],
+                    email: user.email
+                };
+                
+                // Load user data from Supabase
+                await loadUserData();
+                
+                // Update UI
+                document.getElementById('authButtons').classList.add('hidden');
+                document.getElementById('userInfo').classList.remove('hidden');
+                document.getElementById('welcomeUser').textContent = currentUser.username;
+                
+                // Update game UI
+                updateGameUI();
+                
+                showNotification(`Welcome back, ${currentUser.username}!`);
+            }
+        }
+        
+        async function login() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!username || !password) {
+                showNotification('Please enter username and password');
+                return;
+            }
+            
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: `${username}@kingdomclicker.com`,
+                    password: password
+                });
+                
+                if (error) throw error;
+                
+                currentUser = {
+                    id: data.user.id,
+                    username: username,
+                    email: data.user.email
+                };
+                
+                // Load user data
+                await loadUserData();
+                
+                // Update UI
+                updateUIAfterLogin();
+                hideAuthModal();
+                
+                showNotification(`Welcome to the kingdom, ${username}!`);
+                
+            } catch (error) {
+                console.error('Login error:', error);
+                showNotification('Login failed. Please check your credentials.');
+            }
+        }
+        
+        async function register() {
+            const username = document.getElementById('registerUsername').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            
+            if (!username || !password || !confirmPassword) {
+                showNotification('Please fill all fields');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showNotification('Passwords do not match');
+                return;
+            }
+            
+            if (username.length < 3 || username.length > 20) {
+                showNotification('Username must be 3-20 characters');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showNotification('Password must be at least 6 characters');
+                return;
+            }
+            
+            try {
+                // Check if username exists
+                const { data: existingUser } = await supabase
+                    .from('users')
+                    .select('username')
+                    .eq('username', username)
+                    .single();
+                
+                if (existingUser) {
+                    showNotification('Username already taken');
+                    return;
+                }
+                
+                // Create auth user
+                const { data: authData, error: authError } = await supabase.auth.signUp({
+                    email: `${username}@kingdomclicker.com`,
+                    password: password,
+                    options: {
+                        data: {
+                            username: username
+                        }
+                    }
+                });
+                
+                if (authError) throw authError;
+                
+                // Create user profile
+                const { error: profileError } = await supabase
+                    .from('users')
+                    .insert([
+                        {
+                            id: authData.user.id,
+                            username: username,
+                            email: `${username}@kingdomclicker.com`,
+                            created_at: new Date().toISOString(),
+                            game_data: JSON.stringify(gameData)
+                        }
+                    ]);
+                
+                if (profileError) throw profileError;
+                
+                currentUser = {
+                    id: authData.user.id,
+                    username: username,
+                    email: `${username}@kingdomclicker.com`
+                };
+                
+                // Update UI
+                updateUIAfterLogin();
+                hideAuthModal();
+                
+                showNotification(`Welcome to the kingdom, ${username}! Your adventure begins!`);
+                
+            } catch (error) {
+                console.error('Registration error:', error);
+                showNotification('Registration failed. Please try again.');
+            }
+        }
+        
+        async function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                await supabase.auth.signOut();
+                currentUser = null;
+                
+                // Update UI
+                document.getElementById('authButtons').classList.remove('hidden');
+                document.getElementById('userInfo').classList.add('hidden');
+                
+                showNotification('You have left the kingdom');
+                switchPage('menu');
+            }
+        }
+        
+        async function loadUserData() {
+            if (!currentUser) return;
+            
+            try {
+                const { data, error } = await supabase
+                    .from('users')
+                    .select('game_data')
+                    .eq('id', currentUser.id)
+                    .single();
+                
+                if (error) throw error;
+                
+                if (data && data.game_data) {
+                    const savedData = JSON.parse(data.game_data);
+                    // Merge saved data with current game data
+                    gameData = { ...gameData, ...savedData };
+                    initGame();
+                }
+                
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+        
+        async function saveUserData() {
+            if (!currentUser) return;
+            
+            try {
+                const { error } = await supabase
+                    .from('users')
+                    .update({
+                        game_data: JSON.stringify(gameData),
+                        last_login: new Date().toISOString()
+                    })
+                    .eq('id', currentUser.id);
+                
+                if (error) throw error;
+                
+            } catch (error) {
+                console.error('Error saving user data:', error);
+            }
+        }
+        
+        function updateUIAfterLogin() {
+            document.getElementById('authButtons').classList.add('hidden');
+            document.getElementById('userInfo').classList.remove('hidden');
+            document.getElementById('welcomeUser').textContent = currentUser.username;
+            
+            // Update game UI
+            updateGameUI();
+        }
+
+        // ============== MODAL FUNCTIONS ==============
+        function showAuthModal() {
+            document.getElementById('authModal').classList.add('active');
+            showLoginForm();
+        }
+        
+        function showRegisterModal() {
+            document.getElementById('authModal').classList.add('active');
+            showRegisterForm();
+        }
+        
+        function hideAuthModal() {
+            document.getElementById('authModal').classList.remove('active');
+            // Clear form fields
+            document.getElementById('loginUsername').value = '';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('registerUsername').value = '';
+            document.getElementById('registerPassword').value = '';
+            document.getElementById('registerConfirmPassword').value = '';
+        }
+        
+        function showLoginForm() {
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('authModalTitle').textContent = 'Login to Kingdom';
+        }
+        
+        function showRegisterForm() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.remove('hidden');
+            document.getElementById('authModalTitle').textContent = 'Claim Your Throne';
+        }
+
+        // ============== GAME DATA MANAGEMENT ==============
+        function loadGameData() {
+            const savedData = localStorage.getItem('kingdomClickerData');
+            if (savedData) {
+                try {
+                    const parsed = JSON.parse(savedData);
+                    // Only merge if the data structure is valid
+                    if (parsed.coins !== undefined) {
+                        gameData = { ...gameData, ...parsed };
+                    }
+                } catch (e) {
+                    console.error('Error loading saved game data:', e);
+                }
+            }
+            
+            // Load settings
+            document.getElementById('soundToggle').checked = gameData.settings.sound;
+            document.getElementById('musicToggle').checked = gameData.settings.music;
+            document.getElementById('notificationsToggle').checked = gameData.settings.notifications;
+            document.getElementById('autosaveToggle').checked = gameData.settings.autosave;
+            document.getElementById('animationToggle').checked = gameData.settings.animation;
+        }
+        
+        function saveGameData() {
+            // Save to localStorage
+            localStorage.setItem('kingdomClickerData', JSON.stringify(gameData));
+            
+            // Save to Supabase if logged in
+            if (currentUser) {
+                saveUserData();
+            }
+        }
+        
+        function saveSettings() {
+            gameData.settings.sound = document.getElementById('soundToggle').checked;
+            gameData.settings.music = document.getElementById('musicToggle').checked;
+            gameData.settings.notifications = document.getElementById('notificationsToggle').checked;
+            gameData.settings.autosave = document.getElementById('autosaveToggle').checked;
+            gameData.settings.animation = document.getElementById('animationToggle').checked;
+            
+            saveGameData();
+            showNotification('Settings saved successfully!');
+        }
+        
+        function resetGameData() {
+            if (confirm('Are you sure you want to reset all game data? This cannot be undone!')) {
+                gameData = {
+                    coins: 100,
+                    exmo: 0,
+                    gems: 0,
+                    clickPower: 1,
+                    clickLevel: 1,
+                    backpackSlots: 4,
+                    backpackLevel: 1,
+                    autoClickerLevel: 0,
+                    autoClickerSpeed: 0,
+                    autoClickerActive: false,
+                    pets: [],
+                    achievements: [],
+                    settings: gameData.settings, // Keep settings
+                    stats: {
+                        totalClicks: 0,
+                        totalCoins: 0,
+                        totalExmo: 0,
+                        totalGems: 0
+                    },
+                    daily: {
+                        spins: 0,
+                        lastSpin: null
+                    }
+                };
+                
+                // Save to localStorage
+                localStorage.setItem('kingdomClickerData', JSON.stringify(gameData));
+                
+                // Save to Supabase if logged in
+                if (currentUser) {
+                    saveUserData();
+                }
+                
+                // Update UI
+                initGame();
+                loadShopItems();
+                loadAchievements();
+                
+                showNotification('Game data reset successfully!');
+            }
+        }
+
+        // ============== UTILITY FUNCTIONS ==============
         function showNotification(message) {
             if (!gameData.settings.notifications) return;
-            
-            const existingNotifications = document.querySelectorAll('.notification');
-            existingNotifications.forEach(notification => {
-                notification.remove();
-            });
             
             const notification = document.createElement('div');
             notification.className = 'notification';
@@ -3213,175 +2680,37 @@
             }, 3000);
         }
         
-        function playSound(soundType) {
-            if (!gameData.settings.sound) return;
-            
-            // Sound effects would be implemented here
-            console.log('Playing sound:', soundType);
-        }
-        
-        function switchPage(pageId) {
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-            });
-            
-            const targetPage = document.getElementById(pageId);
-            if (targetPage) {
-                targetPage.classList.add('active');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                
-                if (pageId === 'gamePage' && !currentUser) {
-                    setTimeout(() => {
-                        showAuthModal();
-                    }, 500);
-                }
-                
-                if (pageId === 'gamePage' && currentUser) {
-                    loadLeaderboard();
-                    loadChatMessages();
-                }
-            }
-        }
-        
-        function updateUIAfterLogin() {
-            if (currentUser) {
-                document.getElementById('headerAuthButtons').classList.add('hidden');
-                document.getElementById('headerUserInfo').classList.remove('hidden');
-                document.getElementById('welcomeUser').textContent = currentUser.username;
-                
-                document.getElementById('chatInput').disabled = false;
-                document.getElementById('chatSendBtn').disabled = false;
-                
-                updateGameUI();
-                loadLeaderboard();
-                loadChatMessages();
-                
-            } else {
-                document.getElementById('headerAuthButtons').classList.remove('hidden');
-                document.getElementById('headerUserInfo').classList.add('hidden');
-                
-                document.getElementById('chatInput').disabled = true;
-                document.getElementById('chatSendBtn').disabled = true;
-            }
-        }
-        
-        function showAuthModal() {
-            document.getElementById('authModal').classList.add('active');
-        }
-        
-        function hideAuthModal() {
-            document.getElementById('authModal').classList.remove('active');
-            document.getElementById('loginForm').classList.remove('hidden');
-            document.getElementById('registerForm').classList.add('hidden');
-            document.getElementById('forgotPasswordForm').classList.add('hidden');
-        }
-        
-        function showRegisterForm() {
-            document.getElementById('loginForm').classList.add('hidden');
-            document.getElementById('registerForm').classList.remove('hidden');
-            document.getElementById('forgotPasswordForm').classList.add('hidden');
-            document.getElementById('authModalTitle').textContent = 'Claim Your Throne';
-        }
-        
-        function showLoginForm() {
-            document.getElementById('registerForm').classList.add('hidden');
-            document.getElementById('loginForm').classList.remove('hidden');
-            document.getElementById('forgotPasswordForm').classList.add('hidden');
-            document.getElementById('authModalTitle').textContent = 'Login to Kingdom';
-        }
-        
-        function showForgotPasswordForm() {
-            document.getElementById('loginForm').classList.add('hidden');
-            document.getElementById('registerForm').classList.add('hidden');
-            document.getElementById('forgotPasswordForm').classList.remove('hidden');
-            document.getElementById('authModalTitle').textContent = 'Reset Password';
-        }
-        
-        async function handleForgotPassword() {
-            const email = document.getElementById('forgotPasswordEmail').value.trim();
-            
-            if (!email) {
-                showNotification('Please enter your email');
-                return;
-            }
-            
-            try {
-                const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                    redirectTo: `${window.location.origin}/reset-password`,
-                });
-                
-                if (error) throw error;
-                
-                showNotification('Password reset link sent to your email');
-                showLoginForm();
-                
-            } catch (error) {
-                console.error('Error sending reset email:', error);
-                showNotification('Error sending reset email');
-            }
-        }
-        
-        function showHowToPlay() {
-            document.getElementById('howToPlayModal').classList.add('active');
-        }
-        
-        function hideHowToPlayModal() {
-            document.getElementById('howToPlayModal').classList.remove('active');
-        }
-        
-        function startTutorial() {
-            hideHowToPlayModal();
-            switchPage('gamePage');
-            showNotification('Tutorial started! Click the golden button to begin.');
-        }
-        
-        function confirmQuit() {
+        function quitGame() {
             if (confirm('Are you sure you want to leave the kingdom?')) {
                 try {
+                    // Save game before leaving
+                    saveGameData();
+                    
+                    // Try to close window
                     window.close();
                 } catch (e) {
-                    showNotification('Cannot close window from browser restrictions');
+                    // If window cannot be closed, just show message
+                    showNotification('Thank you for playing Kingdom Clicker!');
+                    switchPage('menu');
                 }
             }
         }
         
-        function toggleSound() {
-            gameData.settings.sound = document.getElementById('soundToggle').checked;
-        }
-        
-        function toggleMusic() {
-            gameData.settings.music = document.getElementById('musicToggle').checked;
-        }
-        
-        function toggleNotifications() {
-            gameData.settings.notifications = document.getElementById('notificationsToggle').checked;
-        }
-        
-        function toggleAutosave() {
-            gameData.settings.autosave = document.getElementById('autosaveToggle').checked;
-        }
-        
-        // Check auth status on load
-        async function checkAuthStatus() {
-            const { data, error } = await supabase.auth.getSession();
-            
-            if (data.session) {
-                const user = data.session.user;
-                currentUser = {
-                    id: user.id,
-                    username: user.user_metadata?.username || user.email?.split('@')[0],
-                    email: user.email
-                };
-                
-                await loadUserData();
-                updateUIAfterLogin();
+        function initAutoClicker() {
+            if (gameData.autoClickerSpeed > 0 && !gameData.autoClickerActive) {
+                startAutoClicker();
+                gameData.autoClickerActive = true;
             }
         }
         
-        // Initialize auth check
-        checkAuthStatus();
+        // Auto-save interval
+        setInterval(() => {
+            if (gameData.settings.autosave) {
+                saveGameData();
+            }
+        }, 30000); // Save every 30 seconds
         
-        console.log('Kingdom Clicker Enhanced Version Loaded!');
+        console.log('Kingdom Clicker Enhanced Version Loaded Successfully!');
     </script>
 </body>
 </html>
