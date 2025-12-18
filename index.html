@@ -123,6 +123,7 @@
             align-items: center;
             gap: 8px;
             text-decoration: none;
+            user-select: none;
         }
 
         .btn-login {
@@ -189,6 +190,8 @@
             border-radius: 15px;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
+            user-select: none;
         }
 
         .menu-btn::after {
@@ -321,6 +324,7 @@
             position: relative;
             box-shadow: 0 0 30px rgba(255,215,0,0.5);
             animation: pulse 2s infinite;
+            user-select: none;
         }
 
         @keyframes pulse {
@@ -418,6 +422,7 @@
             border-radius: 5px;
             cursor: pointer;
             transition: var(--transition);
+            font-family: 'Cinzel', serif;
         }
 
         .upgrade-btn:hover:not(:disabled) {
@@ -453,6 +458,7 @@
             text-align: center;
             cursor: pointer;
             transition: var(--transition);
+            user-select: none;
         }
 
         .shop-item:hover {
@@ -522,6 +528,7 @@
             font-size: 1.2rem;
             margin-top: 20px;
             width: 100%;
+            cursor: pointer;
         }
 
         /* Pets Section */
@@ -1155,7 +1162,6 @@
 
     <script>
         // ============== SUPABASE CONFIGURATION ==============
-        // Menggunakan Supabase yang sama dengan projek pertama
         const SUPABASE_URL = 'https://bxhrnnwfqlsoviysqcdw.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ4aHJubndmcWxzb3ZpeXNxY2R3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU3ODkzNDIsImV4cCI6MjA4MTM2NTM0Mn0.O7fpv0TrDd-8ZE3Z9B5zWyAuWROPis5GRnKMxmqncX8';
         
@@ -1204,32 +1210,32 @@
         
         // ============== INITIALIZATION ==============
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM Loaded - Initializing game...');
             initializeGame();
-            loadMenuLeaderboard();
-            setInterval(loadMenuLeaderboard, 10000);
         });
         
         async function initializeGame() {
+            console.log('Starting game initialization...');
+            
             // Generate session ID
             gameData.sessionId = 'clicker_session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
             localStorage.setItem('clickerSessionId', gameData.sessionId);
             
-            // Setup navigation
-            setupNavigation();
-            
-            // Setup auth
-            setupAuth();
-            
-            // Setup game mechanics
-            setupGameMechanics();
-            
-            // Setup chat
-            setupChat();
+            // Setup semua event listeners
+            setupAllEventListeners();
             
             // Check login status
             await checkLoginStatus();
             
-            // Load game data if logged in
+            // Load initial data
+            await loadMenuLeaderboard();
+            
+            console.log('Game initialized successfully!');
+            
+            // Setup periodic updates
+            setInterval(loadMenuLeaderboard, 10000);
+            
+            // Jika sudah login, load game data
             if (currentUser) {
                 await loadGameData();
                 await loadGameLeaderboard();
@@ -1247,80 +1253,185 @@
             initializeBackpack();
         }
         
-        // ============== NAVIGATION ==============
-        function setupNavigation() {
-            // Menu buttons
-            document.getElementById('playBtn').addEventListener('click', function() {
-                switchPage('gamePage');
-                if (currentUser) {
-                    showNotification('Welcome to your kingdom!');
-                }
+        // ============== SETUP ALL EVENT LISTENERS ==============
+        function setupAllEventListeners() {
+            console.log('Setting up event listeners...');
+            
+            // === Menu Page Events ===
+            const playBtn = document.getElementById('playBtn');
+            const quitBtn = document.getElementById('quitBtn');
+            
+            if (playBtn) {
+                playBtn.addEventListener('click', function() {
+                    console.log('Play button clicked');
+                    switchPage('gamePage');
+                    if (currentUser) {
+                        showNotification('Welcome to your kingdom!');
+                    } else {
+                        showNotification('Please login or register to play!');
+                    }
+                });
+            } else {
+                console.error('Play button not found!');
+            }
+            
+            if (quitBtn) {
+                quitBtn.addEventListener('click', function() {
+                    console.log('Quit button clicked');
+                    if (confirm('Are you sure you want to leave the kingdom?')) {
+                        // Coba close window, jika tidak bisa, redirect
+                        try {
+                            window.close();
+                        } catch (e) {
+                            window.location.href = 'about:blank';
+                        }
+                    }
+                });
+            }
+            
+            // === Header Auth Buttons ===
+            const loginBtnHeader = document.getElementById('loginBtnHeader');
+            const registerBtnHeader = document.getElementById('registerBtnHeader');
+            const logoutBtnHeader = document.getElementById('logoutBtnHeader');
+            
+            if (loginBtnHeader) {
+                loginBtnHeader.addEventListener('click', showAuthModal);
+            }
+            
+            if (registerBtnHeader) {
+                registerBtnHeader.addEventListener('click', function() {
+                    showAuthModal();
+                    // Switch to register form
+                    const showRegisterForm = document.getElementById('showRegisterForm');
+                    if (showRegisterForm) {
+                        showRegisterForm.click();
+                    }
+                });
+            }
+            
+            if (logoutBtnHeader) {
+                logoutBtnHeader.addEventListener('click', logout);
+            }
+            
+            // === Auth Modal Events ===
+            const closeAuthModal = document.getElementById('closeAuthModal');
+            const showRegisterForm = document.getElementById('showRegisterForm');
+            const showLoginForm = document.getElementById('showLoginForm');
+            const submitLogin = document.getElementById('submitLogin');
+            const submitRegister = document.getElementById('submitRegister');
+            
+            if (closeAuthModal) closeAuthModal.addEventListener('click', hideAuthModal);
+            if (showRegisterForm) showRegisterForm.addEventListener('click', function(e) {
+                e.preventDefault();
+                showRegisterFormFunc();
+            });
+            if (showLoginForm) showLoginForm.addEventListener('click', function(e) {
+                e.preventDefault();
+                showLoginFormFunc();
+            });
+            if (submitLogin) submitLogin.addEventListener('click', login);
+            if (submitRegister) submitRegister.addEventListener('click', register);
+            
+            // Enter key support for forms
+            const loginPassword = document.getElementById('loginPassword');
+            const registerConfirmPassword = document.getElementById('registerConfirmPassword');
+            
+            if (loginPassword) {
+                loginPassword.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') login();
+                });
+            }
+            
+            if (registerConfirmPassword) {
+                registerConfirmPassword.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') register();
+                });
+            }
+            
+            // === Game Mechanics Events ===
+            const clickButton = document.getElementById('clickButton');
+            const convertCoinsBtn = document.getElementById('convertCoinsBtn');
+            const convertExmoBtn = document.getElementById('convertExmoBtn');
+            const upgradeClickBtn = document.getElementById('upgradeClickBtn');
+            const upgradeBackpackBtn = document.getElementById('upgradeBackpackBtn');
+            const spinBtn = document.getElementById('spinBtn');
+            const chatSendBtn = document.getElementById('chatSendBtn');
+            
+            if (clickButton) clickButton.addEventListener('click', handleClick);
+            if (convertCoinsBtn) convertCoinsBtn.addEventListener('click', convertCoinsToExmo);
+            if (convertExmoBtn) convertExmoBtn.addEventListener('click', convertExmoToGems);
+            if (upgradeClickBtn) upgradeClickBtn.addEventListener('click', upgradeClick);
+            if (upgradeBackpackBtn) upgradeBackpackBtn.addEventListener('click', upgradeBackpack);
+            if (spinBtn) spinBtn.addEventListener('click', spinWheel);
+            if (chatSendBtn) chatSendBtn.addEventListener('click', sendChatMessage);
+            
+            // Shop items
+            document.querySelectorAll('.shop-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const pet = this.getAttribute('data-pet');
+                    const price = parseInt(this.getAttribute('data-price'));
+                    buyPet(pet, price);
+                });
             });
             
-            document.getElementById('quitBtn').addEventListener('click', function() {
-                if (confirm('Are you sure you want to leave the kingdom?')) {
-                    window.close();
-                }
-            });
+            // Chat input enter key
+            const chatInput = document.getElementById('chatInput');
+            if (chatInput) {
+                chatInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        sendChatMessage();
+                    }
+                });
+            }
             
-            // Header auth buttons
-            document.getElementById('loginBtnHeader').addEventListener('click', showAuthModal);
-            document.getElementById('registerBtnHeader').addEventListener('click', function() {
-                showAuthModal();
-                document.getElementById('showRegisterForm').click();
-            });
-            document.getElementById('logoutBtnHeader').addEventListener('click', logout);
+            console.log('All event listeners setup complete!');
         }
         
         function switchPage(pageId) {
+            console.log('Switching to page:', pageId);
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
             });
-            document.getElementById(pageId).classList.add('active');
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                console.log('Page switched successfully');
+                
+                // Scroll ke atas
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                console.error('Target page not found:', pageId);
+            }
         }
         
         // ============== AUTHENTICATION ==============
-        function setupAuth() {
-            // Modal controls
-            document.getElementById('closeAuthModal').addEventListener('click', hideAuthModal);
-            document.getElementById('showRegisterForm').addEventListener('click', showRegisterForm);
-            document.getElementById('showLoginForm').addEventListener('click', showLoginForm);
-            
-            // Form submissions
-            document.getElementById('submitLogin').addEventListener('click', login);
-            document.getElementById('submitRegister').addEventListener('click', register);
-            
-            // Enter key support
-            document.getElementById('loginPassword').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') login();
-            });
-            
-            document.getElementById('registerConfirmPassword').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') register();
-            });
-        }
-        
         function showAuthModal() {
+            console.log('Showing auth modal');
             document.getElementById('authModal').classList.add('active');
         }
         
         function hideAuthModal() {
+            console.log('Hiding auth modal');
             document.getElementById('authModal').classList.remove('active');
         }
         
-        function showRegisterForm() {
+        function showRegisterFormFunc() {
+            console.log('Showing register form');
             document.getElementById('loginForm').classList.add('hidden');
             document.getElementById('registerForm').classList.remove('hidden');
             document.getElementById('authModalTitle').textContent = 'Claim Your Throne';
         }
         
-        function showLoginForm() {
+        function showLoginFormFunc() {
+            console.log('Showing login form');
             document.getElementById('registerForm').classList.add('hidden');
             document.getElementById('loginForm').classList.remove('hidden');
             document.getElementById('authModalTitle').textContent = 'Login to Kingdom';
         }
         
         async function login() {
+            console.log('Login attempt...');
             const username = document.getElementById('loginUsername').value.trim();
             const password = document.getElementById('loginPassword').value;
             
@@ -1375,6 +1486,7 @@
         }
         
         async function register() {
+            console.log('Registration attempt...');
             const username = document.getElementById('registerUsername').value.trim();
             const password = document.getElementById('registerPassword').value;
             const confirmPassword = document.getElementById('registerConfirmPassword').value;
@@ -1424,7 +1536,7 @@
                         {
                             username: username,
                             password: password,
-                            coins: 0,
+                            coins: 100, // Start with 100 coins
                             exmo: 0,
                             gems: 0,
                             click_power: 1,
@@ -1449,14 +1561,14 @@
                 localStorage.setItem('clickerUser', JSON.stringify(currentUser));
                 updateUIAfterLogin();
                 hideAuthModal();
-                showNotification(`Welcome to the kingdom, ${username}! Your adventure begins!`);
+                showNotification(`Welcome to the kingdom, ${username}! Your adventure begins with 100 coins!`);
                 
                 // Reset form
-                document.getElementById('showLoginForm').click();
+                showLoginFormFunc();
                 
                 // Load initial game data
                 gameData = {
-                    coins: 0,
+                    coins: 100,
                     exmo: 0,
                     gems: 0,
                     clickPower: 1,
@@ -1485,20 +1597,6 @@
             }
         }
         
-        function updateUIAfterLogin() {
-            // Update header
-            document.getElementById('headerAuthButtons').classList.add('hidden');
-            document.getElementById('headerUserInfo').classList.remove('hidden');
-            document.getElementById('welcomeUser').textContent = currentUser.username;
-            
-            // Enable chat
-            document.getElementById('chatInput').disabled = false;
-            document.getElementById('chatSendBtn').disabled = false;
-            
-            // Update UI
-            updateGameUI();
-        }
-        
         async function checkLoginStatus() {
             const savedUser = localStorage.getItem('clickerUser');
             if (savedUser) {
@@ -1523,46 +1621,38 @@
                     localStorage.removeItem('clickerUser');
                     
                     // Reset UI
-                    document.getElementById('headerAuthButtons').classList.remove('hidden');
-                    document.getElementById('headerUserInfo').classList.add('hidden');
-                    document.getElementById('chatInput').disabled = true;
-                    document.getElementById('chatSendBtn').disabled = true;
+                    resetUI();
                 }
             } else {
                 // Reset UI
-                document.getElementById('headerAuthButtons').classList.remove('hidden');
-                document.getElementById('headerUserInfo').classList.add('hidden');
-                document.getElementById('chatInput').disabled = true;
-                document.getElementById('chatSendBtn').disabled = true;
+                resetUI();
             }
         }
         
-        // ============== GAME MECHANICS ==============
-        function setupGameMechanics() {
-            // Click button
-            document.getElementById('clickButton').addEventListener('click', handleClick);
-            
-            // Convert buttons
-            document.getElementById('convertCoinsBtn').addEventListener('click', convertCoinsToExmo);
-            document.getElementById('convertExmoBtn').addEventListener('click', convertExmoToGems);
-            
-            // Upgrade buttons
-            document.getElementById('upgradeClickBtn').addEventListener('click', upgradeClick);
-            document.getElementById('upgradeBackpackBtn').addEventListener('click', upgradeBackpack);
-            
-            // Shop items
-            document.querySelectorAll('.shop-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    const pet = this.getAttribute('data-pet');
-                    const price = parseInt(this.getAttribute('data-price'));
-                    buyPet(pet, price);
-                });
-            });
-            
-            // Spin wheel
-            document.getElementById('spinBtn').addEventListener('click', spinWheel);
+        function resetUI() {
+            document.getElementById('headerAuthButtons').classList.remove('hidden');
+            document.getElementById('headerUserInfo').classList.add('hidden');
+            document.getElementById('chatInput').disabled = true;
+            document.getElementById('chatSendBtn').disabled = true;
         }
         
+        function updateUIAfterLogin() {
+            console.log('Updating UI after login for user:', currentUser.username);
+            
+            // Update header
+            document.getElementById('headerAuthButtons').classList.add('hidden');
+            document.getElementById('headerUserInfo').classList.remove('hidden');
+            document.getElementById('welcomeUser').textContent = currentUser.username;
+            
+            // Enable chat
+            document.getElementById('chatInput').disabled = false;
+            document.getElementById('chatSendBtn').disabled = false;
+            
+            // Update UI
+            updateGameUI();
+        }
+        
+        // ============== GAME MECHANICS ==============
         function handleClick() {
             if (!currentUser) {
                 showNotification('Please login to start clicking!');
@@ -1613,6 +1703,7 @@
             effect.style.textShadow = '2px 2px 0 var(--dark-brown)';
             effect.style.pointerEvents = 'none';
             effect.style.animation = 'floatUp 1s ease-out forwards';
+            effect.style.zIndex = '100';
             
             // Add custom animation
             const style = document.createElement('style');
@@ -1627,8 +1718,8 @@
             clickButton.appendChild(effect);
             
             setTimeout(() => {
-                effect.remove();
-                style.remove();
+                if (effect.parentNode) effect.remove();
+                if (style.parentNode) style.remove();
             }, 1000);
         }
         
@@ -1834,6 +1925,7 @@
                 
                 updateGameUI();
                 updatePetsDisplay();
+                initializeBackpack();
                 
             } catch (error) {
                 console.error('Error loading game data:', error);
@@ -1892,6 +1984,8 @@
         }
         
         function updateGameUI() {
+            console.log('Updating game UI...');
+            
             // Update stats
             document.getElementById('coinsValue').textContent = formatNumber(gameData.coins);
             document.getElementById('exmoValue').textContent = formatNumber(gameData.exmo);
@@ -1910,8 +2004,16 @@
             document.getElementById('maxSlots').textContent = gameData.backpackSlots;
             
             // Update upgrade button states
-            document.getElementById('upgradeClickBtn').disabled = gameData.coins < calculateClickUpgradeCost();
-            document.getElementById('upgradeBackpackBtn').disabled = gameData.coins < calculateBackpackUpgradeCost();
+            const upgradeClickBtn = document.getElementById('upgradeClickBtn');
+            const upgradeBackpackBtn = document.getElementById('upgradeBackpackBtn');
+            
+            if (upgradeClickBtn) {
+                upgradeClickBtn.disabled = gameData.coins < calculateClickUpgradeCost();
+            }
+            
+            if (upgradeBackpackBtn) {
+                upgradeBackpackBtn.disabled = gameData.coins < calculateBackpackUpgradeCost();
+            }
         }
         
         function formatNumber(num) {
@@ -1927,6 +2029,8 @@
         // ============== BACKPACK SYSTEM ==============
         function initializeBackpack() {
             const container = document.getElementById('backpackSlotsContainer');
+            if (!container) return;
+            
             container.innerHTML = '';
             
             for (let i = 0; i < gameData.backpackSlots; i++) {
@@ -1936,7 +2040,9 @@
                 if (i < gameData.pets.length) {
                     slot.classList.add('filled');
                     const pet = gameData.pets[i];
-                    slot.textContent = petsData[pet.type].icon;
+                    if (petsData[pet.type]) {
+                        slot.textContent = petsData[pet.type].icon;
+                    }
                 }
                 
                 container.appendChild(slot);
@@ -1945,10 +2051,14 @@
         
         function updatePetsDisplay() {
             const container = document.getElementById('petsContainer');
+            if (!container) return;
+            
             container.innerHTML = '';
             
             gameData.pets.forEach((pet, index) => {
                 const petData = petsData[pet.type];
+                if (!petData) return;
+                
                 const petElement = document.createElement('div');
                 petElement.className = 'pet-item';
                 petElement.innerHTML = `
@@ -1998,6 +2108,8 @@
         
         function updateLeaderboardUI(data, elementId) {
             const container = document.getElementById(elementId);
+            if (!container) return;
+            
             container.innerHTML = '';
             
             if (data.length === 0) {
@@ -2038,16 +2150,6 @@
         }
         
         // ============== CHAT SYSTEM ==============
-        function setupChat() {
-            document.getElementById('chatSendBtn').addEventListener('click', sendChatMessage);
-            document.getElementById('chatInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendChatMessage();
-                }
-            });
-        }
-        
         async function sendChatMessage() {
             if (!currentUser) {
                 showNotification('Please login to chat');
@@ -2085,7 +2187,9 @@
                 
                 // Scroll to bottom
                 const chatMessages = document.getElementById('chatMessages');
-                chatMessages.scrollTop = chatMessages.scrollHeight;
+                if (chatMessages) {
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
                 
             } catch (error) {
                 console.error('Error sending chat:', error);
@@ -2112,6 +2216,7 @@
         
         function updateChatUI(messages) {
             const container = document.getElementById('chatMessages');
+            if (!container) return;
             
             // Keep system message
             const systemMessage = container.querySelector('.chat-message');
@@ -2136,12 +2241,16 @@
             
             // Scroll to bottom
             setTimeout(() => {
-                container.scrollTop = container.scrollHeight;
+                if (container) {
+                    container.scrollTop = container.scrollHeight;
+                }
             }, 100);
         }
         
         // ============== NOTIFICATION SYSTEM ==============
         function showNotification(message) {
+            console.log('Notification:', message);
+            
             // Remove existing notifications
             const existingNotifications = document.querySelectorAll('.notification');
             existingNotifications.forEach(notification => {
